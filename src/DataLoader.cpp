@@ -2,33 +2,58 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <cmath>
 #include <stdexcept>
+using namespace std;
 
-std::vector<std::vector<double>> DataLoader::loadCSV(const std::string& filename) {
-    std::vector<std::vector<double>> dataset;
-    std::ifstream myFile(filename);
+vector<vector<double>> DataLoader::loadCSV(const string& filename) {
+    vector<vector<double>> dataset;
+    ifstream myFile(filename);
 
     // Error handling if the file is missing or locked
     if (!myFile.is_open()) {
-        throw std::runtime_error("Could not open file: " + filename);
+        throw runtime_error("Could not open file: " + filename);
     }
 
-    std::string line, cell;
+    string line;
     
-    // Read the file row by row
-    while (std::getline(myFile, line)) {
-        std::vector<double> row;
-        std::stringstream ss(line);
+    // ignore the first line of the CSV file (header)
+    getline(myFile, line);
 
-        // Split each row by commas
-        while (std::getline(ss, cell, ',')) {
-            try {
-                // Convert the string to a double for K-Means distance math
-                row.push_back(std::stod(cell));
-            } catch (const std::invalid_argument& e) {
-                // Skips headers or non-numeric text gracefully
-                continue; 
+    // Read the file row by row
+    while (getline(myFile, line)) {
+        vector<double> row;
+        string cell = "";
+        bool inQuotes = false;
+        
+        // Parse character-by-character to respect quotation marks
+        for (size_t i = 0; i < line.length(); ++i) {
+            char c = line[i];
+            
+            if (c == '"') {
+                inQuotes = !inQuotes; // Toggle quote state
+            } else if (c == ',' && !inQuotes) {
+                // End of a cell reached outside of quotes
+                try {
+                    row.push_back(stod(cell));
+                } catch (const invalid_argument& e) {
+                    row.push_back(nan(""));
+                } catch (const out_of_range& e) {
+                    row.push_back(nan(""));
+                }
+                cell.clear();
+            } else {
+                cell += c;
             }
+        }
+        
+        // Process the final cell in the row
+        try {
+            row.push_back(stod(cell));
+        } catch (const invalid_argument& e) {
+            row.push_back(nan(""));
+        } catch (const out_of_range& e) {
+            row.push_back(nan(""));
         }
         
         // Only add the row if it contains valid numerical data
