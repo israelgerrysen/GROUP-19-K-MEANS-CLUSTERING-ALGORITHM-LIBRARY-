@@ -2,24 +2,31 @@
 
 
 
-#include <algorithm>
-#include <numeric>
-#include <random>
+CentroidInitializer::CentroidInitializer(int k) : k_(k), gen_(std::random_device{}()) {}
 
-std::vector<std::vector<double>> initializeCentroids(const std::vector<std::vector<double>>& data, int k) {
-    std::vector<std::vector<double>> centroids;
-    if (data.empty() || k <= 0 || k > (int)data.size()) {
+CentroidInitializer::CentroidInitializer(int k, unsigned int seed) : k_(k), gen_(seed) {}
+
+int CentroidInitializer::getK() const {
+    return k_;
+}
+
+void CentroidInitializer::setK(int k) {
+    k_ = k;
+}
+
+CentroidInitializer::Dataset CentroidInitializer::initialize(const Dataset& data) {
+    Dataset centroids;
+    if (data.empty() || k_ <= 0 || k_ > (int)data.size()) {
         return centroids;
     }
 
     // List every index 0..n-1, then shuffle them randomly
     std::vector<int> indices(data.size());
     std::iota(indices.begin(), indices.end(), 0);
-    std::mt19937 gen(std::random_device{}());
-    std::shuffle(indices.begin(), indices.end(), gen);
+    std::shuffle(indices.begin(), indices.end(), gen_);
 
     // The first k shuffled indices are k unique random points
-    for (int i = 0; i < k; i++) {
+    for (int i = 0; i < k_; i++) {
         centroids.push_back(data[indices[i]]);
     }
     return centroids;
