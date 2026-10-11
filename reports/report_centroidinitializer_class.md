@@ -1,4 +1,4 @@
-# Centroid Report 
+# Centroidinitializer Class Report 
 
 ## Classes created
 - The class created was named `Centroidinitializer`
