@@ -1,23 +1,26 @@
 # Week 2 Progress Report
 
-## Completed
-- Implemented the `DataPreprocessor.hpp` and `DataPreprocessor.cpp` modules to clean and prepare matrices for the K-Means algorithm.
-- Created `dropColumn` and `dropRowsWithMissingData` functions to handle unneeded or heavily corrupted data points.
-- Developed robust statistical imputation methods (`fillMissingWithMean`, `fillMissingWithMedian`, `fillMissingWithMode`) to safely replace `NaN` values without discarding entire rows.
-- Built a `oneHotEncode` method to dynamically translate categorical strings into binary numerical columns.
-- Authored a standalone C++ test script (`test_preprocessing.cpp`) and verified all matrix manipulation logic successfully.
+# Class Structure and Implementation: Data Preprocessing
 
-## In Progress
-- Testing and correcting the data processing functions to make sure all the functions and the core logic works as intended
+## 1. What class did you create?
+I created the `DataPreprocessor` class.
 
-## Challenges/Blockers
-- System environment restrictions and path recognition issues prevented the installation and configuration of CMake for automated project building.
-- *Resolution:* Bypassed CMake entirely and executed direct `g++` compilation commands in the terminal to compile the library components and run the test suite.
+## 2. Why?
+This class was created to handle the data cleaning and formatting tasks required before passing a dataset to an algorithm. It provides standardized, reusable methods for removing irrelevant data, handling missing values, and converting categorical strings into a numerical format, ensuring the dataset is ready for mathematical processing.
 
-## Next Week
-- Developing a practical example using a real-world dataset to demonstrate the complete data loading and preprocessing pipeline in action.
+## 3. What data does it hold?
+The `DataPreprocessor` class does not hold any data members. It functions strictly as a utility class, operating directly on the external datasets passed into its methods via a 2D vector `std::vector<std::vector<double>>& dataset`.
 
-## AI Use
-- Tool: Gemini
-- Purpose: Implementation logic for the statistical imputation functions and providing exact `g++` terminal commands for manual compilation.
-- Reason: To ensure complex edge cases (such as dividing by zero in empty columns) were safely handled in the C++ logic, and to establish an immediate workaround for the CMake configuration blocker.
+## 4. What functions operate on that data?
+The class contains several static member functions designed to manipulate and clean the provided dataset:
+*   **`dropColumn`**: Removes a specific, irrelevant, or redundant column from the dataset.
+*   **`dropRowsWithMissingData`**: Deletes any rows that contain missing (`NaN`) values to clean incomplete data.
+*   **`fillMissingWithMean`**: Calculates the mean of a column and replaces any missing values with that average.
+*   **`fillMissingWithMedian`**: Replaces missing values with the median of the column, which is useful for reducing the influence of outliers.
+*   **`fillMissingWithMode`**: Finds the most frequently occurring value in a column and uses it to replace missing data.
+*   **`oneHotEncode`**: Converts categorical string data into a numerical format by appending binary columns representing unique categories.
+
+## 5. Why are some members private and others public? How is the class used by the rest of the program?
+**Public vs. Private:** In the `DataPreprocessor` class, all member functions are `public`, and there are no `private` members. Because it is a static utility class with no internal state or data members to protect, there is no need for encapsulation. Every function is designed to be accessible globally to perform operations on external datasets.
+
+**Usage by the Program:** The rest of the program uses this class without needing to create an instance of it. The functions are called directly using the class name e.g., `DataPreprocessor::fillMissingWithMean(dataset)`. It serves as the data preparation pipeline taking the raw dataset, cleaning and formatting it through these static methods, and then passing the refined data off to the main clustering algorithms.
