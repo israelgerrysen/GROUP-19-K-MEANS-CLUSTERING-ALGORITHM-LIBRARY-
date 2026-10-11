@@ -1,4 +1,4 @@
-# Week X Progress Report
+# Week-01 Progress Report
 
 ## Completed
 - Implemented centroid initialization (`initializeCentroids(data, k)` in `Centroid_initialization.cpp`, declared in `Centroid_initialization.hpp`). It selects `k` unique random points from the dataset as the starting centroids, by shuffling the list of indices and taking the first `k`.
