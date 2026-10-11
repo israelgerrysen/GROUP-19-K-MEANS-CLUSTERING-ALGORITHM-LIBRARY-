@@ -19,11 +19,11 @@
 
 ## What functions operate on that data?
 ### Constructors
-`CentroidInitializer(k)` uses a random seed.
-`CentroidInitializer(k, seed)` uses a fixed seed, so the results can be repeated.
-`getK()` returns `k_`.
-`setK(k)` changes `k_`.
-`initialize(const Dataset& data)` picks `k` different random points from the dataset and returns them as the centroids. It shuffles the list of point positions (indices) and takes the first `k`, so no point is chosen twice. If the data is empty or `k` is invalid (k <= 0 or k larger than the number of points), it returns an empty result.
+- `CentroidInitializer(k)` uses a random seed.
+- `CentroidInitializer(k, seed)` uses a fixed seed, so the results can be repeated.
+- `getK()` returns `k_`.
+- `setK(k)` changes `k_`.
+- `initialize(const Dataset& data)` picks `k` different random points from the dataset and returns them as the centroids. It shuffles the list of point positions (indices) and takes the first `k`, so no point is chosen twice. If the data is empty or `k` is invalid (k <= 0 or k larger than the number of points), it returns an empty result.
 
 ## Why some members are in private and others in public?
 - `k_` and `gen_` are private because they are internal details. Outside code should not change  them directly. For example, `k_` can only be changed through `setK()`.
