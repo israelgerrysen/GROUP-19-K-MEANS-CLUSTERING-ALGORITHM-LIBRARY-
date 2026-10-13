@@ -1,5 +1,5 @@
 
-#include "Centroid_initialization.hpp"
+#include "k_means/Centroid_initialization.hpp"
 #include <cassert>
 #include <iostream>
 #include <set>
