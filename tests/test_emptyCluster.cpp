@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "KMeans.h"
+#include "k_means/EmptyCluster.hpp"
 
 int main() {
 // 1. Create a dummy dataset (5 points, 2 dimensions)
