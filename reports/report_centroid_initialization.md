@@ -22,3 +22,7 @@
 - Tool: Claude (Anthropic)
 - Purpose: Explaining centroid initialization, simplifying the code, writing the test program, and diagnosing the linker error.
 - Reason: To understand the algorithm and fix the build error faster. The code was compiled, run and checked by the team before use.
+
+## References
+- Forgy, E. W. (1965). Cluster analysis of multivariate data: efficiency versus interpretability of classifications. Biometrics, 21(3), 768-769. (The source of picking random data points as starting centroids.)
+- Hastie, T., Tibshirani, R., & Friedman, J. (2009). The Elements of Statistical Learning (2nd ed.). Springer. (The K-Means section is in chapter 14.)
