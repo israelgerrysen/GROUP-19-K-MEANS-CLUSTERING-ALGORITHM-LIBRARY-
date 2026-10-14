@@ -1,4 +1,4 @@
-# Centroidinitializer Class Report 
+# Centroidinitializer Class Report (week 02)
 
 ## Classes created
 - The class created was named `Centroidinitializer`
