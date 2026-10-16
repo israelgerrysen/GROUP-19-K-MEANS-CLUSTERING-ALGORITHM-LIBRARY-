@@ -1,40 +1,42 @@
-#pragma once
-#include <vector>
-#include <limits>
-#include <cmath>
 
-namespace k_means {
+#ifndef CLUSTER_ASSIGNMENT_HPP
+#define CLUSTER_ASSIGNMENT_HPP
+
+#include "Distance_Calculation.hpp"
+#include <vector>
+#include <stdexcept>
 
 class ClusterAssignment {
 public:
-    static double calculateDistance(const std::vector<double>& point1, const std::vector<double>& point2) {
-        double sum = 0.0;
-        for (size_t i = 0; i < point1.size(); ++i) {
-            sum += (point1[i] - point2[i]) * (point1[i] - point2[i]);
-        }
-        return std::sqrt(sum);
-    }
+    // Define a single data point and a collection of data points.
+    using Point = std::vector<double>;
+    using Dataset = std::vector<Point>;
 
-    // TASK 6: Assigns each data point to the nearest centroid
+    /*
+     * Assign each data point to its nearest centroid.
+     *
+     * Parameters:
+     *   data      - The dataset containing the data points.
+     *   centroids - The dataset containing the cluster centroids.
+     *
+     * Returns:
+     *   A vector of integers representing the cluster index
+     *   assigned to each data point.
+     *
+     * Rules:
+     *   1. Each point is assigned to its nearest centroid.
+     *   2. If distances are equal, the centroid with the
+     *      smallest index is selected.
+     *   3. An exception is thrown if either dataset is empty
+     *      or if point and centroid dimensions do not match.
+     */
     static std::vector<int> assignClusters(
-        const std::vector<std::vector<double>>& data,
-        const std::vector<std::vector<double>>& centroids)
-    {
-        std::vector<int> assignments(data.size());
-        for (size_t i = 0; i < data.size(); ++i) {
-            double minDistance = std::numeric_limits<double>::max();
-            int bestCluster = 0;
-            for (size_t j = 0; j < centroids.size(); ++j) {
-                double distance = calculateDistance(data[i], centroids[j]);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    bestCluster = static_cast<int>(j);
-                }
-            }
-            assignments[i] = bestCluster;
-        }
-        return assignments;
-    }
+        const Dataset& data,
+        const Dataset& centroids
+    );
+
+    // Prevent object creation because all operations are static.
+    ClusterAssignment() = delete;
 };
 
-}
+#endif // CLUSTER_ASSIGNMENT_HPP
