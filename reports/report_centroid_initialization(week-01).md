@@ -10,7 +10,9 @@
 - Creation of a class called `CentroidInitializer` in the `Centroid_initialization.hpp` header file.
 
 ## Challenges/Blockers
-- Linker error `undefined reference to initializeCentroids(...)` when building the test. Cause: only the test file was compiled. Fix: compile the test file together with the implementation file:
+- Linker error `undefined reference to initializeCentroids(...)` when building the test
+- Cause: only the test file was compiled. 
+- Fix: compiling the test file together with the implementation file
   `g++ -std=c++23 testing_Centroid_intialization.cpp Centroid_initialization.cpp -o test`
 - The current version uses plain random selection, so results can vary between runs. A smarter method such as K-Means++ could be considered later.
 
