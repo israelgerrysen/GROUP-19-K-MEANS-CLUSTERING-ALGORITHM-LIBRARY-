@@ -14,7 +14,7 @@
 // ============================================================================
 
 // The header with the class declaration (Point, Dataset, update).
-#include "k-means/Centroid_Update.hpp"
+#include "k_means/Centroid_Update.hpp"
 
 // std::size_t: the unsigned type used for sizes and loop counters.
 #include <cstddef>
