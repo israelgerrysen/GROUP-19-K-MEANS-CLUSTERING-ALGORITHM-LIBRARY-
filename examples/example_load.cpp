@@ -4,7 +4,7 @@
 int main() {
     try {
         // Call the static method directly using the class scope
-        auto dataset = DataLoader::loadCSV("data/input/football.csv");
+        auto dataset = DataLoader::loadCSV("football.csv");
         
         std::cout << "---Dataset Preview ---\n";
         std::cout << "Successfully loaded " << dataset.size() << " rows.\n";
