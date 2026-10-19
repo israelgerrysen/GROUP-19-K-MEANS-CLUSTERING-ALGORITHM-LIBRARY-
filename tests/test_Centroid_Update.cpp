@@ -1,4 +1,4 @@
-#include "Centroid_Update.hpp"
+#include "k_means/Centroid_Update.hpp"
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
