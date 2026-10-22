@@ -44,4 +44,4 @@ Polymorphism is not utilized in the `DataPreprocessor` class. Since the class co
 
 ## 4. Class Layout Drawings
 
-![Class Layout Diagram](./datapreprocessor_diagram.jpeg)
+![Class Layout Diagram](./diagrams/datapreprocessor_diagram.jpeg)
