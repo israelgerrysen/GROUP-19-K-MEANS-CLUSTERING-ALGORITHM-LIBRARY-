@@ -28,4 +28,4 @@ Polymorphism wasn't used in this class. None of the member functions are virtual
 | Inheritance   | Not used (one responsibility, no variants needed yet)                        |
 | Polymorphism  | Not used (no virtual functions, no templates)                                |
 
-![ConvergenceDetector class layout](../diagrams/week-03-class-layout.jpeg)
+![ConvergenceDetector class layout](../contributions/diagrams/week-03-class-layout.jpeg)
