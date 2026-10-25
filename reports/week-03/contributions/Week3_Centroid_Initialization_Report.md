@@ -48,3 +48,5 @@ The compiler picks the correct constructor depending on the arguments we give.
 | Encapsulation | Yes | private `k_` and `gen_`, public functions |
 | Inheritance | No | The class is stand-alone |
 | Polymorphism | Yes (overloading only) | Two constructors |
+
+![Class Layout Diagram](./diagrams/CentroidInitializer_class.jpeg)
