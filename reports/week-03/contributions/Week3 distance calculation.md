@@ -47,4 +47,7 @@ Polymorphism means the same name can do different things.
 | Encapsulation | Partly | Maths hidden inside the functions, deleted constructor, `const` inputs |
 | Inheritance | No | The class is stand-alone |
 | Polymorphism | No | Two separate functions, no overloading or virtual functions |
+
+
+
 ![Class Layout Diagram](./diagrams/distanceCalculator_class.jpeg)
