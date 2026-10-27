@@ -57,4 +57,3 @@ This project implements a C++ tool for evaluating K-Means clustering using the *
 2. **Execution:** The application passes datasets to a `ClusterEvaluator*` instance pointed at `InertiaEvaluator`.
 3. **Calculation:** The evaluator iterates through each assigned point, computes the distance to its assigned centroid, aggregates the sum of squares, and returns a scalar score.
 4. **Interpretation:** Lower returned values indicate tighter, higher-quality cluster assignments.
-   ![class diagram](./diagrams/InertiaEvaluator.jpeg)
