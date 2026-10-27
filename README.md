@@ -176,7 +176,7 @@ g++ -std=c++17 -I include testing_files/testing_Centroid_Update.cpp src/Centroid
 Run each program after it compiles (on Windows PowerShell, use `.\test_centroid.exe`). Each test prints a message when all its checks pass.
 
 Tips:
-- `ClusterAssignment` uses `DistanceCalculator`, so its test also needs `Distance_calculation1.cpp`.
+- `ClusterAssignment` uses `DistanceCalculator`, so its test also needs `Distance_calculation.cpp`.
 - If a folder name has spaces, put the path in quotes.
 - If a compile fails, an old `.exe` may still be there. Run the test only when the compile succeeds.
 
