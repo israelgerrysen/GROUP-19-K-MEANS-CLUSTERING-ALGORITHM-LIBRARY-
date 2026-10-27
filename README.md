@@ -26,9 +26,9 @@ Each step is a separate class, so every part can be tested on its own.
 | Distance calculation | `DistanceCalculator` | Measures the distance between two points | Done |
 | Cluster assignment | `ClusterAssignment` | Gives each point the index of its nearest centroid | Done |
 | Centroid update | `CentroidUpdater` | Moves each centroid to the mean of its points | Done |
-| Convergence detection | *(in progress)* | Decides when to stop repeating | In progress |
-| Empty cluster handling | `EmptyClusterHandler` | Fixes clusters that end up with no points | In progress |
-| Cluster evaluation | *(in progress)* | Scores the final clusters | In progress |
+| Convergence detection | `ConvergeDetector` | Decides when to stop repeating | Done |
+| Empty cluster handling | `EmptyClusterHandler` | Fixes clusters that end up with no points | Done |
+| Cluster evaluation | `ClusterEvaluator` | Scores the final clusters | In progress |
 
 ## Project structure
 
