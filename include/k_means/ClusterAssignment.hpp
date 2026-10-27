@@ -2,7 +2,7 @@
 #ifndef CLUSTER_ASSIGNMENT_HPP
 #define CLUSTER_ASSIGNMENT_HPP
 
-#include "Distance_Calculation.hpp"
+#include "k_means/Distance_Calculation.hpp"
 #include <vector>
 #include <stdexcept>
 
