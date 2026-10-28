@@ -1,26 +1,19 @@
-# WEEK 3 PROGRESS REPORT
+# Week 03 Project Report
 
-**Project:** Feature Scaling in C++
+## Project: Feature Scaler
 
-## 1. Introduction
-During week 3, I continued working on my feature scaling program in C++. I focused on understanding how object-oriented programming concepts are applied in my code.
+### 1. Encapsulation
+The `FeatureScaler` class groups the data and functions needed for feature scaling. Its private members—`method_`, `offsets_`, `scales_`, and `fitted_`—store the selected method, scaling values, and fitted status. Public functions such as `fit()`, `transform()`, and `is_fitted()` allow users to work with the scaler without directly changing these private members. The private functions `validate()` and `apply()` support internal operations.
 
-## 2. Work Completed
-I worked on the `FeatureScaler` class, which supports Min-Max scaling and Standard scaling. I also reviewed the test program to check how the scaling functions work.
+### 2. Inheritance
+The `FeatureScaler` class does not inherit from another class in the supplied `feature_scaler.hpp` file. Therefore, inheritance is not demonstrated in this class.
 
-## 3. Object-Oriented Programming Concepts
+### 3. Polymorphism
+The supplied `feature_scaler.hpp` file does not declare virtual functions or overridden functions, so it does not demonstrate runtime polymorphism. The `Method` enum allows the implementation to choose Min-Max scaling or Standard scaling, but choosing an algorithm with a condition is not, by itself, runtime polymorphism.
 
-**Encapsulation:** The program keeps scaling information within the `FeatureScaler` class. Private members protect the internal data, while public functions allow users to interact with the class.
+## Conclusion
+The `FeatureScaler` class clearly demonstrates encapsulation through private data members and public member functions. Inheritance and runtime polymorphism are not shown in the supplied header and implementation.
 
-**Polymorphism:** The program uses different scaling methods selected through the `Method` option. However, this is not runtime polymorphism through virtual functions.
-
-**Inheritance:** The current `FeatureScaler` implementation does not use inheritance. Both scaling methods are handled within the same class.
-
-## 4. Challenges
-My main challenge was understanding how the different class functions work together.
-
-## 5. Conclusion
-This week helped me understand encapsulation and how classes organize data and functions in C++. I also gained a better understanding of the difference between selecting methods and using inheritance or polymorphism.
 ## 4. Class Layout Drawing
 
 ![Class Layout Diagram](./diagrams/featureScaler(week_3_progress).jpg)
