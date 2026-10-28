@@ -23,4 +23,4 @@ My main challenge was understanding how the different class functions work toget
 This week helped me understand encapsulation and how classes organize data and functions in C++. I also gained a better understanding of the difference between selecting methods and using inheritance or polymorphism.
 ## 4. Class Layout Drawing
 
-![Class Layout Diagram](./diagrams/feature scaler(week_3 progress).jpg)
+![Class Layout Diagram](./diagrams/featureScaler(week_3_progress).jpg)
