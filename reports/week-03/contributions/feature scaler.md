@@ -1,18 +1,16 @@
-# Week 03 Project Report
+# Week 03 Report
 
-## Project: Feature Scaler
+## Encapsulation
+The `FeatureScaler` class keeps its data members `method_`, `offsets_`, `scales_`, and `fitted_` private. Public functions such as `fit()`, `transform()`, `fit_transform()`, `inverse_transform()`, and `is_fitted()` allow the scaler to be used without directly accessing those variables. The private functions `validate()` and `apply()` handle internal tasks. This keeps the data and the operations that use it together in one class.
 
-### 1. Encapsulation
-The `FeatureScaler` class groups the data and functions needed for feature scaling. Its private members—`method_`, `offsets_`, `scales_`, and `fitted_`—store the selected method, scaling values, and fitted status. Public functions such as `fit()`, `transform()`, and `is_fitted()` allow users to work with the scaler without directly changing these private members. The private functions `validate()` and `apply()` support internal operations.
+## Inheritance
+Inheritance is a C++ concept where a new class is created from an existing class. The new class, called the derived class, can reuse accessible data and functions from the base class and can add its own features. Inheritance can reduce repeated code and help represent relationships between classes. The `FeatureScaler` class does not inherit from another class, so inheritance is not used in this implementation.
 
-### 2. Inheritance
-The `FeatureScaler` class does not inherit from another class in the supplied `feature_scaler.hpp` file. Therefore, inheritance is not demonstrated in this class.
-
-### 3. Polymorphism
-The supplied `feature_scaler.hpp` file does not declare virtual functions or overridden functions, so it does not demonstrate runtime polymorphism. The `Method` enum allows the implementation to choose Min-Max scaling or Standard scaling, but choosing an algorithm with a condition is not, by itself, runtime polymorphism.
+## Polymorphism
+Polymorphism allows the same interface to be used for different behaviours. In C++, runtime polymorphism is commonly implemented with virtual functions and overridden functions in derived classes. The `FeatureScaler` class does not declare virtual functions or overrides. Its `Method` enum selects Min-Max scaling or Standard scaling, but selecting an option with a condition is not, by itself, runtime polymorphism.
 
 ## Conclusion
-The `FeatureScaler` class clearly demonstrates encapsulation through private data members and public member functions. Inheritance and runtime polymorphism are not shown in the supplied header and implementation.
+The `FeatureScaler` class demonstrates encapsulation by keeping its data members private and providing public functions to work with the scaler. Inheritance and runtime polymorphism are not implemented in this class.
 
 ## 4. Class Layout Drawing
 
