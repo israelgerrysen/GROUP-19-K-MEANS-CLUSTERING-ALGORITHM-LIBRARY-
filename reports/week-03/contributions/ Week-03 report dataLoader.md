@@ -21,3 +21,4 @@ Polymorphism is not used in `DataLoader`. The `loadCSV` function is defined as a
 | Class | Access Specifiers | Member Data | Member Functions | Inheritance / Polymorphism |
 | :--- | :--- | :--- | :--- | :--- |
 | `DataLoader` | `public:` | None (Stateless) | `static vector<vector<double>> loadCSV(const string& filename)` | None (Static Utility Class) |
+![Class Layout Diagram](./diagrams/dataLoader_class.jpeg)
