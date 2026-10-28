@@ -11,6 +11,7 @@ I created the `FeatureScaler` class to scale numerical data using MinMax scaling
 3. What data does it hold?
 
 The class stores the selected scaling method in `method_`. It stores the values needed to perform the transformation in `offsets_` and `scales_`. It also has a Boolean flag called `fitted_`, which indicates whether the class has already been fitted to data. 
+
 4. What functions operate on that data?
 
 The `fit()` function examines the input data and calculates the values needed for scaling. The `transform()` function uses the calculated values to scale data, while `fit_transform()` combines fitting and transformation in one operation. The `inverse_transform()` function converts scaled data back toward its original values using the stored scaling information. The `is_fitted()` function checks whether fitting has been completed. The private `validate()` function checks whether the input data is suitable for processing, while the private `apply()` function performs the main transformation or inverse-transformation calculations.
