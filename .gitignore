@@ -1,0 +1,11 @@
+﻿*.exe
+# Out-of-source CMake build output belongs under repository root/build/.
+/build/
+/cmake-build-*/
+
+# CMake-generated files if an in-source build is configured accidentally.
+/CMakeCache.txt
+/CMakeFiles/
+/cmake_install.cmake
+/CTestTestfile.cmake
+/Testing/
