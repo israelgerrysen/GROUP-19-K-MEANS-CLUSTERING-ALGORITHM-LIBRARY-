@@ -1,44 +1,66 @@
-#include "k_means/DataLoader.hpp"
-#include "kmeans_example_utils.hpp"
+#ifndef KMEANS_EXAMPLE_UTILS_HPP
+#define KMEANS_EXAMPLE_UTILS_HPP
 
-#include <exception>
-#include <filesystem>
+#include <k_means/k_means.hpp>
+
+#include <cstddef>
 #include <iostream>
-#include <string>
+#include <utility>
 #include <vector>
 
-int main(int argc, char* argv[]) {
-    // In football.csv, columns 12 and 13 are home and away goal counts.
-    // Pass a different CSV path as the first command-line argument if needed.
-    std::string filename = argc > 1 ? argv[1] : "data/input/football.csv";
-    if (argc == 1 && !std::filesystem::exists(filename)) {
-        for (const auto& candidate : std::vector<std::string>{
-                 "../data/input/football.csv", "../../data/input/football.csv"}) {
-            if (std::filesystem::exists(candidate)) {
-                filename = candidate;
-                break;
-            }
-        }
+namespace kmeans_example {
+using Dataset = CentroidInitializer::Dataset;
+
+struct Result {
+    Dataset centroids;
+    std::vector<int> labels;
+    double inertia;
+    int iterations;
+};
+
+inline Result cluster(const Dataset& rawData, int k, unsigned int seed = 42) {
+    Dataset data = rawData;
+    DataPreprocessor::fillMissingWithMedian(data);
+
+    FeatureScaler scaler;
+    const Dataset scaledData = scaler.fit_transform(data);
+    CentroidInitializer initializer(k, seed);
+    Dataset centroids = initializer.initialize(scaledData);
+    ConvergenceDetector convergence(1e-6, 100);
+    std::vector<int> previousLabels;
+    int iterations = 0;
+
+    for (int iteration = 1; iteration <= convergence.getMaxIterations(); ++iteration) {
+        const Dataset previousCentroids = centroids;
+        auto labels = ClusterAssignment::assignClusters(scaledData, previousCentroids);
+        handleEmptyClusters(scaledData, centroids, labels);
+        auto nextCentroids = CentroidUpdater::update(scaledData, labels, centroids);
+        const bool stop = convergence.shouldStop(
+            previousCentroids, nextCentroids, previousLabels, labels, iteration);
+        centroids = std::move(nextCentroids);
+        previousLabels = std::move(labels);
+        iterations = iteration;
+        if (stop) break;
     }
 
-    try {
-        const auto data = DataLoader::loadCSV(filename, {12, 13});
-        if (data.empty()) {
-            std::cerr << "The selected CSV columns contain no data rows.\n";
-            return 1;
+    // Recompute labels against the final centroids before evaluating the result.
+    auto labels = ClusterAssignment::assignClusters(scaledData, centroids);
+    const double inertia = ClusterEvaluator::computeInertia(scaledData, labels, centroids);
+    return {scaler.inverse_transform(centroids), std::move(labels), inertia, iterations};
+}
+
+inline void printResult(const Result& result, std::ostream& output = std::cout) {
+    output << "Iterations: " << result.iterations << '\n';
+    output << "Inertia (scaled feature space): " << result.inertia << '\n';
+    for (std::size_t c = 0; c < result.centroids.size(); ++c) {
+        output << "Cluster " << c << " centroid: (";
+        for (std::size_t d = 0; d < result.centroids[c].size(); ++d) {
+            if (d != 0) output << ", ";
+            output << result.centroids[c][d];
         }
-
-        const auto result = kmeans_example::cluster(data, 3, 42);
-        std::cout << "Loaded " << data.size()
-                  << " matches using home and away goals from " << filename << ".\n";
-        kmeans_example::printResult(result);
-
-        std::vector<std::size_t> counts(result.centroids.size(), 0);
-        for (const int label : result.labels) ++counts[static_cast<std::size_t>(label)];
-        for (std::size_t cluster = 0; cluster < counts.size(); ++cluster)
-            std::cout << "Matches in cluster " << cluster << ": " << counts[cluster] << '\n';
-    } catch (const std::exception& error) {
-        std::cerr << "Could not cluster CSV data: " << error.what() << '\n';
-        return 1;
+        output << ")\n";
     }
 }
+}
+
+#endif // KMEANS_EXAMPLE_UTILS_HPP
