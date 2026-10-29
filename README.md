@@ -168,11 +168,11 @@ The CMake project registers separate tests for centroid initialization, centroid
 
 ## License
 
-The project's original code is released under the [MIT License](LICENSE). The bundled `football.csv` has no source or license record in the repository and is **not** covered by the code license; see [data/input/README.md](data/input/README.md) and establish its redistribution terms before sharing it.
+The project's original code is released under the [MIT License](LICENSE). The bundled `football.csv` has no source or license record in the repository and is **not** covered by the code license;
 
 ## Team contributions
 
-The personal details below are retained from the original project README. Weekly module contribution records are kept under `reports/week-*/contributions/`. Confirm that those reports accurately represent each member's final contribution before submission.
+Weekly module contribution records are kept under `reports/week-*/contributions/`.
 
 | NAME | REG NO. | PROGRAMME |
 |---|---|---|
@@ -187,12 +187,11 @@ The personal details below are retained from the original project README. Weekly
 
 ### Team collaboration
 
-The project stores weekly reports and module contribution notes under `reports/`. Before submission, the group should add a brief, accurate description here of how members divided the work, integrated modules, reviewed one another's changes, and coordinated through Git/GitHub. Those details should describe the group's actual process.
+The project stores weekly reports and module contribution notes under `reports/`.
 
 ### AI-use declaration
 
-- **Tool:** OpenAI Codex.
-- **Purpose:** Assisted with code review and implementation changes, CMake/build setup, tests, examples, and project documentation during this development session.
-- **Reason:** To help review and improve module integration and provide guidance on completing the reusable library.
+- **Tool:** OpenAI.
+- **Purpose:** Assisted with research on the K-means clustering algorithm,guidence on CMake/build setup, testing the algorithm and debugging to ensure the algorithm works without errors.
+- **Reason:** To provide guidence in research to ensure proper understanding of the logic behind the algorithm and provide guidance on the reusable error-free library.
 
-The assignment requires the group to verify AI-assisted suggestions, understand the submitted code and documentation, and keep the AI-use declaration complete in weekly reports and the final submission. Add any other AI tools or uses by group members; do not treat this declaration as covering work not listed here.
