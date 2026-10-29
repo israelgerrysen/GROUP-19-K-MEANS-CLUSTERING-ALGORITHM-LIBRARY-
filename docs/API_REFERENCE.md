@@ -1,6 +1,10 @@
 # Public API Reference
 
-All headers are installed under `include/k_means/` and should be included with the `k_means/` prefix. The library is built as the CMake target `KMeansLibrary::kmeans_lib`. The project requires C++20.
+All headers are installed under `include/k_means/` and should be included with the `k_means/` prefix. Include the complete public API with `<k_means/k_means.hpp>`, or select individual module headers. The library is built as the CMake target `KMeansLibrary::kmeans_lib`. The project requires C++20.
+
+## Umbrella header
+
+Include `<k_means/k_means.hpp>` to make every public module available from one include. It includes the data loader, preprocessor, scaler, centroid initializer/updater, distance calculator, assignment, empty-cluster handler, convergence detector, and evaluator. The library remains a compiled CMake target, so consumers must still link `KMeansLibrary::kmeans_lib`.
 
 ## Shared data representation
 
