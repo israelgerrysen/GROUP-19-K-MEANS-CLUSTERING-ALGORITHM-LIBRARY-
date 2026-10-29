@@ -31,7 +31,7 @@ DataLoader (optional) -> DataPreprocessor -> FeatureScaler
     final labels + ClusterEvaluator (inertia)
 ```
 
-The actual project example is in `examples/kmeans_example_utils.hpp`. It copies the input, imputes missing values with each column's median, scales by min-max scaling, initializes centroids from distinct observations, alternates assignment/empty-cluster repair/update, checks convergence, assigns labels against the final centroids, evaluates inertia, and inverse-transforms centroids for display.
+The example programs in `examples/example_kmeans.cpp` and `examples/example_csv_clustering.cpp` demonstrate this workflow directly, using the public umbrella header. It copies the input, imputes missing values with each column's median, scales by min-max scaling, initializes centroids from distinct observations, alternates assignment/empty-cluster repair/update, checks convergence, assigns labels against the final centroids, evaluates inertia, and inverse-transforms centroids for display.
 
 ## Module responsibilities
 
