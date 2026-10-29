@@ -1,6 +1,6 @@
 # Algorithm and Module Workflow
 
-The assignment brief calls out dataset loading, data preprocessing, feature scaling, centroid initialization, distance calculation, cluster assignment, centroid update, convergence detection, empty-cluster handling, and cluster evaluation. The public modules implement these as separate operations. The caller owns the orchestration and the order of operations.
+The library has the following functionalities; dataset loading, data preprocessing, feature scaling, centroid initialization, distance calculation, cluster assignment, centroid update, convergence detection, empty-cluster handling, and cluster evaluation. The public modules implement these as separate operations. The caller owns the orchestration and the order of operations.
 
 ## End-to-end flow
 
