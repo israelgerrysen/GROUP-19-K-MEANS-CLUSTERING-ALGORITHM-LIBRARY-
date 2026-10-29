@@ -49,7 +49,7 @@ On Linux or macOS, use `./build/example_kmeans` and `./build/example_csv_cluster
 .\build\example_csv_clustering.exe .\data\input\football.csv
 ```
 
-The in-memory example has fixed synthetic data and a fixed seed, so its initial centroids are repeatable. Both programs print cluster centroids, labels or counts, iteration count, and inertia as appropriate. The shared example helper is located at `examples/kmeans_example_utils.hpp`; it is example support code, not part of the installed public API.
+The in-memory example has fixed synthetic data and a fixed seed, so its initial centroids are repeatable. Both programs print cluster centroids, labels or counts, iteration count, and inertia as appropriate. Each example coordinates the public library components directly through `#include <k_means/k_means.hpp>`.
 
 ## Run the tests
 
@@ -78,16 +78,14 @@ add_executable(my_app main.cpp)
 target_link_libraries(my_app PRIVATE KMeansLibrary::kmeans_lib)
 ```
 
-Set `CMAKE_PREFIX_PATH` to the installation prefix when it is not in a standard package location. Include public headers by their installed paths, for example `#include "k_means/ClusterAssignment.hpp"`.
+Set `CMAKE_PREFIX_PATH` to the installation prefix when it is not in a standard package location. Include the complete public API with `#include <k_means/k_means.hpp>`, or include a specific header such as `#include <k_means/ClusterAssignment.hpp>`.
 
 ## Minimal API example
 
 This example shows the core assignment/update loop. For production use, also preprocess missing values, scale features, repair empty clusters, stop using the convergence detector, and evaluate the final assignments. The shipped complete example demonstrates that fuller workflow.
 
 ```cpp
-#include "k_means/Centroid_initialization.hpp"
-#include "k_means/Centroid_Update.hpp"
-#include "k_means/ClusterAssignment.hpp"
+#include <k_means/k_means.hpp>
 
 #include <iostream>
 
@@ -110,14 +108,14 @@ int main() {
 }
 ```
 
-This intentionally small loop has a fixed iteration count and does not repair empty clusters. See `examples/kmeans_example_utils.hpp` for the complete example workflow and the API reference for validation behavior.
+This intentionally small loop has a fixed iteration count and does not repair empty clusters. See `examples/example_kmeans.cpp` and `examples/example_csv_clustering.cpp` for complete workflows and the API reference for validation behavior.
 
 ## Limitations and usage notes
 
 - K-Means uses Euclidean distance and numeric vectors; categorical data must be converted to numeric features before clustering.
 - `DataLoader` reads a header row and numeric CSV cells. A non-numeric or non-finite cell is represented as NaN for preprocessing; it is not categorical encoding.
 - `DataPreprocessor::oneHotEncode` appends encoded columns for a separately supplied category value per row. It does not parse a categorical CSV column itself.
-- Missing values must be removed or imputed before scaling and clustering. The example helper uses median imputation.
+- Missing values must be removed or imputed before scaling and clustering. Both examples use median imputation.
 - Scaling changes the distance space. The example reports inertia in scaled feature space and inverse-transforms centroids for display.
 - Plain K-Means can converge to different local results with different initial centroids. Pass a seed to `CentroidInitializer` for repeatable initialization.
 - The library provides algorithm components rather than a single public `KMeans` estimator class; callers coordinate the steps. The end-to-end helper lives in `examples/` and is not installed as library API.
