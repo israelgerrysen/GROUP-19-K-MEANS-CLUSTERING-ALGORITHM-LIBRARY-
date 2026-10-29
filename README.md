@@ -32,7 +32,8 @@ Design and implement a reusable C++ library that demonstrates object-oriented de
 6. Repeat assignment and update until centroids or assignments stabilize, or the iteration limit is reached.
 7. Assign points against the final centroids and calculate inertia.
 
-The library exposes these as components rather than a single public estimator class. The example helper in `examples/kmeans_example_utils.hpp` demonstrates how to coordinate the steps.
+The library exposes these as components rather than a single public estimator class. The example programs demonstrate how to coordinate the steps using the public umbrella header.
+
 
 ## Project structure
 
@@ -51,8 +52,7 @@ project-root/
 └── build/                         Generated build output (created by CMake)
 ```
 
-Each public header in `include/k_means/` declares a module implemented by a corresponding file in `src/`. Tests include public headers and link to the library target. The examples also link to the library; `kmeans_example_utils.hpp` is private example support and is not part of the installed API.
-
+Each public header in `include/k_means/` declares a module implemented by a corresponding file in `src/`. Tests include public headers and link to the library target. Both example programs use the public umbrella header and link to the library target.
 ## Requirements
 
 - CMake 3.16 or newer.
@@ -98,12 +98,10 @@ On Linux or macOS, execute `./build/example_kmeans` and `./build/example_csv_clu
 
 ## Use the library
 
-The public headers are included using the `k_means/` prefix. This short example illustrates centroid initialization, assignment, and update:
+Include the complete public API with `#include <k_means/k_means.hpp>`. This umbrella header is installed with the library. Individual headers under `k_means/` are also available when an application only needs selected components. This short example illustrates centroid initialization, assignment, and update:
 
 ```cpp
-#include "k_means/Centroid_initialization.hpp"
-#include "k_means/Centroid_Update.hpp"
-#include "k_means/ClusterAssignment.hpp"
+#include <k_means/k_means.hpp>
 
 int main() {
     using Dataset = CentroidInitializer::Dataset;
@@ -118,7 +116,8 @@ int main() {
 }
 ```
 
-This compact snippet uses a fixed iteration count and omits preprocessing and empty-cluster repair. See `examples/example_kmeans.cpp` and `examples/kmeans_example_utils.hpp` for a fuller workflow, or the [user guide](docs/USER_GUIDE.md) and [API reference](docs/API_REFERENCE.md) for details. Invalid input is generally reported with standard exceptions such as `std::invalid_argument`.
+This compact snippet uses a fixed iteration count and omits preprocessing and empty-cluster repair. See `examples/example_kmeans.cpp` and `examples/example_csv_clustering.cpp` for fuller workflows, or the [user guide](docs/USER_GUIDE.md) and [API reference](docs/API_REFERENCE.md) for details. Invalid input is generally reported with standard exceptions such as `std::invalid_argument`.
+
 
 ## Install and use from another CMake project
 
@@ -137,7 +136,7 @@ add_executable(my_app main.cpp)
 target_link_libraries(my_app PRIVATE KMeansLibrary::kmeans_lib)
 ```
 
-If the installation prefix is not in a standard location, set `CMAKE_PREFIX_PATH` to that prefix when configuring the consumer project. Public headers install under `include/k_means/`.
+If the installation prefix is not in a standard location, set `CMAKE_PREFIX_PATH` to that prefix when configuring the consumer project. Public headers install under `include/k_means/`, including the umbrella header `k_means/k_means.hpp`.
 
 ## Run the tests
 
