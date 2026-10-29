@@ -36,11 +36,11 @@ target_include_directories(kmeans_lib PUBLIC
 
 if(KMEANS_BUILD_EXAMPLES)
     add_executable(example_kmeans examples/example_kmeans.cpp)
-    target_include_directories(example_kmeans PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/examples)
+
     target_link_libraries(example_kmeans PRIVATE KMeansLibrary::kmeans_lib)
 
     add_executable(example_csv_clustering examples/example_csv_clustering.cpp)
-    target_include_directories(example_csv_clustering PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/examples)
+
     target_link_libraries(example_csv_clustering PRIVATE KMeansLibrary::kmeans_lib)
 endif()
 
