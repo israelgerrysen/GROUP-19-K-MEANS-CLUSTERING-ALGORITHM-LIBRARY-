@@ -137,6 +137,3 @@ docs/              User, algorithm, and API documentation
 build/             Generated build tree; do not treat as source
 ```
 
-## Team and AI-use declarations
-
-The assignment asks for member contributions, team collaboration details, and a complete AI-use declaration. These are group-specific facts. The team should write and verify them in its hand-authored root README and final report, including tool, purpose, and reason for each AI use as required by the assignment. Do not copy unverified declarations from examples or assume that this guide supplies those facts.
