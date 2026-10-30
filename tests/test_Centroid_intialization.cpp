@@ -1,40 +1,40 @@
-
 #include "k_means/Centroid_initialization.hpp"
+
 #include <cassert>
 #include <iostream>
+#include <limits>
 #include <set>
-
-using Dataset = CentroidInitializer::Dataset;
+#include <stdexcept>
 
 int main() {
-    Dataset data = {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}};
+    using Dataset = CentroidInitializer::Dataset;
+    const Dataset data{{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}};
+    auto throws = [](auto&& action) {
+        try { action(); } catch (const std::invalid_argument&) { return true; }
+        return false;
+    };
 
-    // Invalid input returns empty
-    assert(CentroidInitializer(2).initialize({}).empty());
-    assert(CentroidInitializer(0).initialize(data).empty());
-    assert(CentroidInitializer(-1).initialize(data).empty());
-    assert(CentroidInitializer(6).initialize(data).empty());
+    assert(throws([] { CentroidInitializer invalid(0); }));
+    assert(throws([] { CentroidInitializer invalid(-1); }));
+    assert(throws([&] { CentroidInitializer(2).initialize({}); }));
+    assert(throws([&] { CentroidInitializer(6).initialize(data); }));
+    assert(throws([&] { CentroidInitializer(1).initialize({{1, 2}, {3}}); }));
+    assert(throws([&] { CentroidInitializer(1).initialize({{1, std::numeric_limits<double>::infinity()}}); }));
 
-    // Valid input: k centroids, all unique, all taken from the data
-    CentroidInitializer init(3);
-    Dataset c = init.initialize(data);
-    std::set<std::vector<double>> unique(c.begin(), c.end());
-    std::set<std::vector<double>> original(data.begin(), data.end());
-    assert(c.size() == 3 && unique.size() == 3);
-    for (const auto& p : c)
-        assert(original.count(p) == 1);
+    const Dataset centroids = CentroidInitializer(3, 42).initialize(data);
+    const std::set<std::vector<double>> unique(centroids.begin(), centroids.end());
+    const std::set<std::vector<double>> original(data.begin(), data.end());
+    assert(centroids.size() == 3 && unique.size() == 3);
+    for (const auto& point : centroids) assert(original.count(point) == 1);
+    assert(CentroidInitializer(5, 42).initialize(data).size() == data.size());
+    assert(centroids == CentroidInitializer(3, 42).initialize(data));
 
-    // k equal to the dataset size uses every point
-    assert(CentroidInitializer(5).initialize(data).size() == 5);
-
-    // getK / setK
+    CentroidInitializer init(3, 42);
     assert(init.getK() == 3);
     init.setK(2);
     assert(init.getK() == 2 && init.initialize(data).size() == 2);
+    assert(throws([&] { init.setK(0); }));
+    assert(init.getK() == 2); // rejected setter leaves state unchanged
 
-    // Same seed gives the same result
-    assert(CentroidInitializer(3, 42).initialize(data) ==
-           CentroidInitializer(3, 42).initialize(data));
-
-    std::cout << "All tests passed\n";
+    std::cout << "Centroid initialization checks passed.\n";
 }
