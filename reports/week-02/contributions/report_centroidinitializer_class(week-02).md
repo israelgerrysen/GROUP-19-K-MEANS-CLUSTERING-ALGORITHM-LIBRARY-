@@ -2,36 +2,39 @@
 
 # Centroidinitializer Class Report (week 02)
 
-## Classes created
-- The class created was named `Centroidinitializer`
+# Week 2 Class Explanation: Centroid Initialization
 
-## Why?
-- A starting centroid is need before the algorithm can begin.
-- To remember the Value of `k`and keep its own random number generator, so the rest of the program does nothave to manage them.
+## 1. What class did you create?
+I created a class called `CentroidInitializer`. It prepares the starting centroids for the K-Means algorithm by choosing `k` different points from the dataset.
 
-## The Data it holds
-### private
-`k_`: The number of centroids to pick.
-`gen_` : The Random number generator (`std::mt19937`).
+## 2. Why did you create it?
+K-Means needs starting centroids before it can group the data. This class keeps the centroid selection work in one place, so the rest of the program can ask for starting points without handling the selection steps itself.
 
-### public
-- The class defines two type names:
-- `Point`: A vector of doubles.
-- `Dataset`: A vector of points.
+## 3. What data does the class hold?
+The class stores two private pieces of data:
 
-## What functions operate on that data?
-### Constructors
-- `CentroidInitializer(k)` uses a random seed.
-- `CentroidInitializer(k, seed)` uses a fixed seed, so the results can be repeated.
-- `getK()` returns `k_`.
-- `setK(k)` changes `k_`.
-- `initialize(const Dataset& data)` picks `k` different random points from the dataset and returns them as the centroids. It shuffles the list of point positions (indices) and takes the first `k`, so no point is chosen twice. If the data is empty or `k` is invalid (k <= 0 or k larger than the number of points), it returns an empty result.
+- `k_`: the number of centroids to choose.
+- `gen_`: a random number generator used to shuffle the data point choices.
 
-## Why some members are in private and others in public?
-- `k_` and `gen_` are private because they are internal details. Outside code should not change  them directly. For example, `k_` can only be changed through `setK()`.
-- The constructors, `getK()`, `setK()` and `initialize()`  are public because they are the only things other code needs to use.
+The header also defines two helpful names for the data shapes:
 
-## How the class is used by the rest of the program.
-- The rest of the program creates a `CentroidInitializer` with a value for `k`, then calls `initialize(data)` on the dataset. The returned centroids are given to the next steps, such as distance calculation and cluster assignment.
+- `Point` means a list of numbers for one data point.
+- `Dataset` means a list of points.
 
-- The class is checked by `testing_Centroid_intialization.cpp`, which tests invalid input, uniqueness of the centroids, `getK`/`setK`, and the same-seed case.
+## 4. What functions operate on that data?
+
+- `CentroidInitializer(int k)` creates the initializer with a requested number of centroids and random choices.
+- `CentroidInitializer(int k, unsigned int seed)` creates it with a seed. Reusing the same seed makes the selection repeatable.
+- `getK()` returns the current number of centroids.
+- `setK(int k)` changes that number, as long as it is valid.
+- `initialize(const Dataset& data)` chooses and returns `k` different data points for the initial centroids. It reports an error for invalid input, such as an empty dataset or an invalid `k`.
+
+The header declares these functions. Their working code is in `Centroid_initialization.cpp`.
+
+## 5. Why are some members private and others public? How is the class used by the rest of the program?
+The functions are public so other parts of the program can create and use a `CentroidInitializer`. The stored values `k_` and `gen_` are private so other code cannot change them directly. Instead, it uses the class's functions, which help keep the class in a valid state.
+
+The rest of the program can create an initializer, pass it a dataset through `initialize(data)`, and use the returned points as the starting centroids. The test file checks that the class selects the right number of distinct points, gives repeatable results when seeded, and rejects invalid inputs.
+
+## Header File Role
+The header file describes the class's public names, functions, and private data. It tells other source files how to use the class. The `.cpp` file contains the detailed steps that make the functions work.
