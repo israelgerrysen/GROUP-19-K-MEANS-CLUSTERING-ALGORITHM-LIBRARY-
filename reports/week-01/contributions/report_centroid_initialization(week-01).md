@@ -1,32 +1,30 @@
 # BUSULWA GERRYSON ISRAEL 25/U/0826 BELE
-
-
-# Week-01 Progress Report
+# Week 1 Progress Report
 
 ## Completed
-- Implemented centroid initialization (`initializeCentroids(data, k)` in `Centroid_initialization.cpp`, declared in `Centroid_initialization.hpp`). It selects `k` unique random points from the dataset as the starting centroids, by shuffling the list of indices and taking the first `k`.
-- Invalid input (empty dataset, `k <= 0`, or `k` larger than the dataset) returns an empty result.
-- Wrote a test program (`testing_Centroid_intialization.cpp`) that checks the invalid cases, that exactly `k` centroids are returned, that they are unique, and that each one comes from the dataset. All checks pass.
-- 
+- Created the centroid initialization feature for the K-Means project.
+- Added `CentroidInitializer`, which selects `k` different rows from the input data to use as the starting centroids.
+- Added a random mode and a seeded mode. A seed makes the same input produce the same selection, which is useful for repeatable examples and tests.
+- Added checks for invalid values of `k`, empty data, too many centroids, points with different numbers of features, and values that are not finite numbers.
+- Added getter and setter methods to read and update `k`. The setter rejects values below 1.
+- Created a test file to check invalid inputs, distinct selected points, repeatable results with the same seed, selecting all points, and updating `k`.
 
 ## In Progress
-- Creation of a class called `CentroidInitializer` in the `Centroid_initialization.hpp` header file.
+- No unfinished Week 1 work is shown in the three files reviewed. The feature and its checks are present.
 
 ## Challenges/Blockers
-- Linker error `undefined reference to initializeCentroids(...)` when building the test
-- Cause: only the test file was compiled. 
-- Fix: compiling the test file together with the implementation file
-  `g++ -std=c++23 testing_Centroid_intialization.cpp Centroid_initialization.cpp -o test`
-- The current version uses plain random selection, so results can vary between runs. A smarter method such as K-Means++ could be considered later.
+- The initializer needs valid input: the dataset must not be empty, `k` must be at least 1 and no greater than the number of points, and every point must have the same number of finite feature values.
+- No other blocker is shown in the files reviewed.
 
 ## Next Week
-- Integrating centroid initialization with the other modules of the K-Means library.
-
+- Connect the initializer to the rest of the K-Means algorithm so its chosen points can be used as starting centroids.
+- Build and run the project tests, then fix any issues they reveal.
+- Review the feature with the group and agree on any improvements needed.
 
 ## AI Use
-- Tool: Claude (Anthropic)
-- Purpose: Explaining centroid initialization, simplifying the code, writing the test program, and diagnosing the linker error.
-- Reason: To understand the algorithm and fix the build error faster. The code was compiled, run and checked by the team before use.
+- Tool: OpenAI.
+- Purpose: Read the Week 1 source files and draft this report in simple language.
+- Reason: To  explain and understand the completed feature and its checks clearly.
 
 ## References
 - Forgy, E. W. (1965). Cluster analysis of multivariate data: efficiency versus interpretability of classifications. Biometrics, 21(3), 768-769. (The source of picking random data points as starting centroids.)
