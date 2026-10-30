@@ -1,52 +1,36 @@
 # BUSULWA GERRYSON ISRAEL 25/U/0826 BELE
 
-# Week 3 Report: Centroid Initialization
+# Week 3 Report: Class Design in Centroid Initialization
 
-This report explains inheritance, polymorphism and encapsulation in my `CentroidInitializer` class. The class layout drawing is in the attached photo.
+This report explains how inheritance, polymorphism, and encapsulation appear in my centroid initialization code. It also shows the class layout in a simple text diagram.
 
-## 1. Class Layout
-
-
-| Part | Name | Access |
-|---|---|---|
-| Member data | `k_`, `gen_` | private |
-| Member functions | two constructors, `getK()`, `setK()`, `initialize()` | public |
-| Type names | `Point`, `Dataset` | public |
-| Protected members | none | - |
-
-## 2. Encapsulation
-Encapsulation means keeping data and the functions that use it together in one class, and hiding the data from outside code.
-
-In my class:
-- The data (`k_` and `gen_`) is **private**. Other code cannot read or change it directly.
-- Other code can only use the **public** functions.
-- `getK()` lets other code read `k_`, and `setK()` lets it change `k_`.
-- `initialize()` uses `gen_` internally, so the outside code never touches the random number generator.
-
-This protects the data. For example, `k_` can only be changed through `setK()`, and `initialize()` checks that `k` is valid before it does any work. If the inside of the class changes later, the rest of the program does not need to change.
-
-## 3. Inheritance
-Inheritance means one class takes the members of another class (a base class).
-
-`CentroidInitializer` does **not** use inheritance. It is a stand-alone class with no base class and no child classes. I did not need it, because the class has one simple job: pick the starting centroids. So there is no inheritance arrow in my drawing.
-
-This is also why there are no `protected` members. `protected` is only useful when a child class needs to use its parent's data, and my class has no child classes.
-
-## 4. Polymorphism
-Polymorphism means the same name can do different things.
-
-`CentroidInitializer` does not use virtual functions, so it has no runtime polymorphism. It does use **constructor overloading**, which is a type of polymorphism decided when the code is compiled. The class has two constructors with the same name but different parameters:
-- `CentroidInitializer(int k)` uses a random seed, so the results are different every time.
-- `CentroidInitializer(int k, unsigned int seed)` uses a fixed seed, so the results can be repeated (useful for testing).
-
-The compiler picks the correct constructor depending on the arguments we give.
-
-## 5. Summary
-
-| Concept | Used in my class? | Where |
-|---|---|---|
-| Encapsulation | Yes | private `k_` and `gen_`, public functions |
-| Inheritance | No | The class is stand-alone |
-| Polymorphism | Yes (overloading only) | Two constructors |
-
+## Class Layout
 ![Class Layout Diagram](./diagrams/CentroidInitializer_class.jpeg)
+
+
+The class uses `public` for the parts that other code needs to call. The stored values are `private`, so they can only be changed through the class's functions. There is no `protected` member in this class.
+
+## Encapsulation
+
+Encapsulation means keeping data and the functions that use it together, while controlling direct access to that data. `CentroidInitializer` does this by keeping `k_` and `gen_` private. Other code uses `getK()`, `setK()`, and `initialize()` instead of changing those values directly.
+
+The setter also checks that `k` is at least 1 before changing `k_`. The initializer checks that the dataset is valid before choosing points. These checks help prevent invalid settings and input from being used.
+
+## Inheritance
+
+Inheritance lets one class build on another class. The `CentroidInitializer` class does not inherit from another project class, and no project class inherits from it. So inheritance is not used in this feature.
+
+## Polymorphism
+
+Polymorphism lets related classes provide different versions of the same function, often through virtual functions. This feature has one class and does not declare virtual functions or override a parent class's functions. So polymorphism is not used here.
+
+## How the Class Is Used
+
+Other code can create a `CentroidInitializer` with the required number of centroids. It can optionally give a seed to make random choices repeatable. Then it passes the dataset to `initialize()`. The function returns the selected data points, which can be used as the K-Means starting centroids. The test file creates and calls this class to check its behavior.
+
+## Summary
+
+The main object-oriented idea used in this feature is encapsulation: the class keeps its settings private and provides public functions to work with them. Inheritance and polymorphism are not part of the current implementation.
+
+
+
