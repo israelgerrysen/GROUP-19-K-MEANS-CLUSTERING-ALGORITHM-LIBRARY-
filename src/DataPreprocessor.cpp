@@ -1,140 +1,95 @@
+// Implements matrix cleanup and missing-value imputation column by column.
+// oneHotEncode appends one indicator feature per distinct category in sorted order.
 #include "k_means/DataPreprocessor.hpp"
-#include <cmath>
+
 #include <algorithm>
+#include <cmath>
+#include <stdexcept>
 #include <unordered_map>
 #include <set>
 
-// drop a specific column from the dataset
-//usually used when a column is irrelevant or redundant
+namespace {
+// Validate the matrix shape and return its feature count. NaN is allowed here
+// because the preprocessing methods below are designed to handle missing values.
+std::size_t validateMatrix(const std::vector<std::vector<double>>& data) {
+    if (data.empty()) return 0;
+    const auto columns = data.front().size();
+    for (const auto& row : data) {
+        if (row.size() != columns) throw std::invalid_argument("All dataset rows must have the same number of columns.");
+        for (double value : row) if (std::isinf(value)) throw std::invalid_argument("Dataset values must not be infinite.");
+    }
+    return columns;
+}
+}
+
 void DataPreprocessor::dropColumn(std::vector<std::vector<double>>& dataset, int columnIndex) {
-    for (auto& row : dataset) {
-        if (columnIndex >= 0 && columnIndex < row.size()) {
-            row.erase(row.begin() + columnIndex);
-        }
-    }
+    const auto columns = validateMatrix(dataset);
+    if (columnIndex < 0 || static_cast<std::size_t>(columnIndex) >= columns)
+        throw std::out_of_range("Column index is outside the dataset.");
+    for (auto& row : dataset) row.erase(row.begin() + columnIndex);
 }
 
-// drop rows that contain any NaN values
-//usually used when the dataset is small and we want to remove incomplete data
 void DataPreprocessor::dropRowsWithMissingData(std::vector<std::vector<double>>& dataset) {
-    for (auto it = dataset.begin(); it != dataset.end(); ) {
-        bool hasNaN = false;
-        for (double val : *it) {
-            if (std::isnan(val)) {
-                hasNaN = true;
-                break;
-            }
-        }
-        if (hasNaN) {
-            it = dataset.erase(it);
-        } else {
-            ++it;
-        }
-    }
+    validateMatrix(dataset);
+    dataset.erase(std::remove_if(dataset.begin(), dataset.end(), [](const auto& row) {
+        return std::any_of(row.begin(), row.end(), [](double value) { return std::isnan(value); });
+    }), dataset.end());
 }
 
-// fill missing values in the dataset with the mean of the respective column
-//usually used when we assume that the missing data is random and the mean is a good representation of the data
 void DataPreprocessor::fillMissingWithMean(std::vector<std::vector<double>>& dataset) {
-    if (dataset.empty()) return;
-    size_t numCols = dataset[0].size();
-    
-    for (size_t col = 0; col < numCols; ++col) {
-        double sum = 0.0;
-        int validCount = 0;
-        for (size_t row = 0; row < dataset.size(); ++row) {
-            if (!std::isnan(dataset[row][col])) {
-                sum += dataset[row][col];
-                validCount++;
-            }
-        }
-        double mean = (validCount > 0) ? (sum / validCount) : 0.0;
-        for (size_t row = 0; row < dataset.size(); ++row) {
-            if (std::isnan(dataset[row][col])) {
-                dataset[row][col] = mean;
-            }
-        }
+    const auto columns = validateMatrix(dataset);
+    // Impute feature-by-feature so each replacement uses only that feature's data.
+    for (std::size_t col = 0; col < columns; ++col) {
+        long double sum = 0.0L;
+        std::size_t count = 0;
+        for (const auto& row : dataset) if (!std::isnan(row[col])) { sum += row[col]; ++count; }
+        if (count == 0) throw std::invalid_argument("Cannot impute a column containing only missing values.");
+        const double mean = static_cast<double>(sum / count);
+        for (auto& row : dataset) if (std::isnan(row[col])) row[col] = mean;
     }
 }
 
-// fill missing values in the dataset with the median of the respective column
-//usually used when we want to reduce the influence of outliers in the data
 void DataPreprocessor::fillMissingWithMedian(std::vector<std::vector<double>>& dataset) {
-    if (dataset.empty()) return;
-    size_t numCols = dataset[0].size();
-    
-    for (size_t col = 0; col < numCols; ++col) {
-        std::vector<double> validValues;
-        for (size_t row = 0; row < dataset.size(); ++row) {
-            if (!std::isnan(dataset[row][col])) {
-                validValues.push_back(dataset[row][col]);
-            }
-        }
-        if (validValues.empty()) continue; 
-        
-        std::sort(validValues.begin(), validValues.end());
-        double median = 0.0;
-        size_t size = validValues.size();
-        
-        if (size % 2 == 0) {
-            median = (validValues[size / 2 - 1] + validValues[size / 2]) / 2.0;
-        } else {
-            median = validValues[size / 2];
-        }
-        
-        for (size_t row = 0; row < dataset.size(); ++row) {
-            if (std::isnan(dataset[row][col])) {
-                dataset[row][col] = median;
-            }
-        }
+    const auto columns = validateMatrix(dataset);
+    // Sorting makes the middle observed value(s) available for each feature.
+    for (std::size_t col = 0; col < columns; ++col) {
+        std::vector<double> values;
+        for (const auto& row : dataset) if (!std::isnan(row[col])) values.push_back(row[col]);
+        if (values.empty()) throw std::invalid_argument("Cannot impute a column containing only missing values.");
+        std::sort(values.begin(), values.end());
+        const auto middle = values.size() / 2;
+        const double median = values.size() % 2 ? values[middle]
+            : values[middle - 1] / 2.0 + values[middle] / 2.0;
+        for (auto& row : dataset) if (std::isnan(row[col])) row[col] = median;
     }
 }
 
-// fill missing values in the dataset with the mode of the respective column
-//usually used when we want to replace missing values with the most common value in the data
 void DataPreprocessor::fillMissingWithMode(std::vector<std::vector<double>>& dataset) {
-    if (dataset.empty()) return;
-    size_t numCols = dataset[0].size();
-    
-    for (size_t col = 0; col < numCols; ++col) {
-        std::unordered_map<double, int> frequencies;
-        int maxFreq = 0;
+    const auto columns = validateMatrix(dataset);
+    // Count observed values per feature; the first value to reach the maximum wins ties.
+    for (std::size_t col = 0; col < columns; ++col) {
+        std::unordered_map<double, std::size_t> frequencies;
         double mode = 0.0;
-        
-        for (size_t row = 0; row < dataset.size(); ++row) {
-            double val = dataset[row][col];
-            if (!std::isnan(val)) {
-                frequencies[val]++;
-                if (frequencies[val] > maxFreq) {
-                    maxFreq = frequencies[val];
-                    mode = val;
-                }
-            }
+        std::size_t maxFrequency = 0;
+        for (const auto& row : dataset) if (!std::isnan(row[col])) {
+            const auto frequency = ++frequencies[row[col]];
+            if (frequency > maxFrequency) { maxFrequency = frequency; mode = row[col]; }
         }
-        if (maxFreq == 0) continue; 
-        
-        for (size_t row = 0; row < dataset.size(); ++row) {
-            if (std::isnan(dataset[row][col])) {
-                dataset[row][col] = mode;
-            }
-        }
+        if (maxFrequency == 0) throw std::invalid_argument("Cannot impute a column containing only missing values.");
+        for (auto& row : dataset) if (std::isnan(row[col])) row[col] = mode;
     }
 }
 
-// puts the dataset into a binary format based on categorical strings
-//usually used when we want to convert categorical data into a numerical format
-void DataPreprocessor::oneHotEncode(std::vector<std::vector<double>>& dataset, const std::vector<std::string>& categoricalColumn) {
-    if (dataset.size() != categoricalColumn.size()) return; 
-
-    std::set<std::string> uniqueCategories(categoricalColumn.begin(), categoricalColumn.end());
-
-    for (size_t row = 0; row < dataset.size(); ++row) {
-        for (const auto& category : uniqueCategories) {
-            if (categoricalColumn[row] == category) {
-                dataset[row].push_back(1.0); 
-            } else {
-                dataset[row].push_back(0.0); 
-            }
-        }
-    }
+void DataPreprocessor::oneHotEncode(std::vector<std::vector<double>>& dataset,
+                                    const std::vector<std::string>& categoricalColumn) {
+    const auto columns = validateMatrix(dataset);
+    if (dataset.size() != categoricalColumn.size())
+        throw std::invalid_argument("There must be one category value per dataset row.");
+    std::set<std::string> categories(categoricalColumn.begin(), categoricalColumn.end());
+    if (categories.empty()) return;
+    // A sorted shared category order ensures each output column means the same category.
+    for (auto& row : dataset) row.reserve(columns + categories.size());
+    for (std::size_t row = 0; row < dataset.size(); ++row)
+        for (const auto& category : categories)
+            dataset[row].push_back(categoricalColumn[row] == category ? 1.0 : 0.0);
 }
