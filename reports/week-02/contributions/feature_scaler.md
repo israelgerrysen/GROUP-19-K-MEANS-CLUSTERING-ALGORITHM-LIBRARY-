@@ -47,6 +47,7 @@ A constant feature would have a scale of 0, so the class uses 1 instead to avoid
 The **public** functions are the only actions other code needs: learn, scale, unscale, and check status. The **private** data cannot be changed by accident, since only `fit` sets it, and only after all calculations succeed. The private helpers are internal steps that can change without breaking other code.
  
  How is the class used?
+ 
 Intended use in the k-means program :
 
 1. `FeatureScaler scaler(FeatureScaler::Method::Standard);`
