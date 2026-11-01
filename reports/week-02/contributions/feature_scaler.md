@@ -1,25 +1,57 @@
-# Week 2 Progress Report
+NAKAWEESA LINDA LUCY
+25/U/02658/PS
 
-1. What class did you create?
+# FeatureScaler: Class Structure and Implementation
 
-I created a C++ class called `FeatureScaler`. The class is designed to organize the data and functions needed to scale numerical data. 
+## 1. What class did you create?
 
-2. Why?
+I created `FeatureScaler` (in `feature_scaler.hpp` and `feature_scaler.cpp`). It rescales the columns (features) of a data table so they are on a similar scale. It supports two methods, chosen with the `Method` enum:
 
-I created the `FeatureScaler` class to scale numerical data using MinMax scaling or Standard scaling. MinMax scaling adjusts values based on the minimum and maximum values in the data, while Standard scaling uses the data's central value and variation to transform the values. Scaling can help put features with different ranges on a more comparable scale, which is useful in data processing and machine-learning tasks.
+- **MinMax** squeezes each feature into the range 0 to 1.
+- **Standard** shifts each feature to a mean of 0 and a standard deviation of 1.
 
-3. What data does it hold?
+## 2. Why?
 
-The class stores the selected scaling method in `method_`. It stores the values needed to perform the transformation in `offsets_` and `scales_`. It also has a Boolean flag called `fitted_`, which indicates whether the class has already been fitted to data. 
+K-means groups points by distance. If one feature has big numbers (income, around 50,000) and another has small ones (age, around 30), the big one dominates and the small one is effectively ignored. Scaling gives every feature a fair influence.
 
-4. What functions operate on that data?
+I used a class because scaling needs memory. The numbers learned from the training data must be saved and reused to scale new data the same way and to convert results, such as cluster centers, back to the original units.
 
-The `fit()` function examines the input data and calculates the values needed for scaling. The `transform()` function uses the calculated values to scale data, while `fit_transform()` combines fitting and transformation in one operation. The `inverse_transform()` function converts scaled data back toward its original values using the stored scaling information. The `is_fitted()` function checks whether fitting has been completed. The private `validate()` function checks whether the input data is suitable for processing, while the private `apply()` function performs the main transformation or inverse-transformation calculations.
+## 3. What data does it hold?
 
-5. Why are some members private and others public?
+All of it is private:
 
-The public functions are available to other parts of the program, allowing users to fit the scaler, transform data, restore transformed data, and check its fitted status. The private members store the internal state and scaling values, while the private helper functions carry out internal tasks. This design prevents the scaling values from being changed directly by outside code and makes the class easier and safer to use. It is an example of encapsulation in C++.
+- `method_` is the chosen scaling method.
+- `offsets_` holds one number per feature: the minimum (MinMax) or the mean (Standard).
+- `scales_` holds one number per feature: the range (MinMax) or the standard deviation (Standard).
+- `fitted_` records whether `fit` has finished successfully.
 
-6. How is the class used by the rest of the program?
+A constant feature would have a scale of 0, so the class uses 1 instead to avoid dividing by zero.
 
-In the test program, I create a `FeatureScaler` object and provide it with numerical data. The object is fitted to the data to calculate the required scaling values, and the transformation functions are then used to scale the data. The test program can check the output to see whether the scaling works as expected. It can also use `inverse_transform()` to convert scaled values back toward their original values and `is_fitted()` to check whether fitting has taken place.
+## 4. What functions operate on that data?
+
+**Public:**
+
+- `FeatureScaler(method)` stores the method (default MinMax).
+- `fit(data)` learns the offsets and scales.
+- `transform(data)` scales data: `(value - offset) / scale`.
+- `fit_transform(data)` does both in one call.
+- `inverse_transform(data)` reverses the scaling: `value * scale + offset`.
+- `is_fitted()` reports whether `fit` has been run.
+
+**Private helpers:**
+
+- `validate(data)` checks that the data is non-empty, rectangular, and finite.
+- `apply(data, inverse)` does the math for both `transform` and `inverse_transform`, so the checks are written once.
+
+## 5. Why are some members private and others public? How is the class used?
+
+The **public** functions are the only actions other code needs: learn, scale, unscale, and check status. The **private** data cannot be changed by accident, since only `fit` sets it, and only after all calculations succeed. The private helpers are internal steps that can change without breaking other code.
+
+Intended use in the k-means program :
+
+1. `FeatureScaler scaler(FeatureScaler::Method::Standard);`
+2. `auto scaled = scaler.fit_transform(data);`
+3. Run k-means on `scaled`.
+4. `scaler.inverse_transform(centroids);` to return results to the original units.
+
+Calling `transform` before `fit` throws an error instead of returning wrong numbers.
