@@ -1,4 +1,6 @@
-#include "feature_scaler.hpp"
+// Learns per-feature min/max or mean/standard-deviation statistics and applies them consistently.
+// Constant features use a unit scale so transformation and inverse transformation remain defined.
+#include "k_means/feature_scaler.hpp"
 
 #include <algorithm>
 #include <cmath>
