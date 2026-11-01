@@ -29,9 +29,7 @@ NAKAWEESA LINDA LUCY
 - Tool: Claude
 - Purpose: Reviewed my code for errors and missing edge cases, suggested tests
            Helped me understand compilation errors and review the header, CPP and test files.
--          helped me find problems early and present my progress clearly. I checked its suggestions against my own code
--          I used it to get explanations while checking my code and learning how to test it.
-
+         
 
 
 
