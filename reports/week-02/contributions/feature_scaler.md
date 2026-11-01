@@ -43,10 +43,10 @@ A constant feature would have a scale of 0, so the class uses 1 instead to avoid
 - `validate(data)` checks that the data is non-empty, rectangular, and finite.
 - `apply(data, inverse)` does the math for both `transform` and `inverse_transform`, so the checks are written once.
 
-## 5. Why are some members private and others public? How is the class used?
-
+## 5. Why are some members private and others public?
 The **public** functions are the only actions other code needs: learn, scale, unscale, and check status. The **private** data cannot be changed by accident, since only `fit` sets it, and only after all calculations succeed. The private helpers are internal steps that can change without breaking other code.
-
+ 
+ How is the class used?
 Intended use in the k-means program :
 
 1. `FeatureScaler scaler(FeatureScaler::Method::Standard);`
