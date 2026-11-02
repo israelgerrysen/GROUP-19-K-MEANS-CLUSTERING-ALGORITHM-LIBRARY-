@@ -1,4 +1,7 @@
-# Week 2 Progress Report
+# Week 2 Report
+# SSEGAWA JASIFA
+# 25/U/08782/PS
+# BCCE
 
 # Class Structure and Implementation: Data Preprocessing
 
@@ -21,6 +24,6 @@ The class contains several static member functions designed to manipulate and cl
 *   **`oneHotEncode`**: Converts categorical string data into a numerical format by appending binary columns representing unique categories.
 
 ## 5. Why are some members private and others public? How is the class used by the rest of the program?
-**Public vs. Private:** In the `DataPreprocessor` class, all member functions are `public`, and there are no `private` members. Because it is a static utility class with no internal state or data members to protect, there is no need for encapsulation. Every function is designed to be accessible globally to perform operations on external datasets.
+**Public vs. Private:** Within the `DataPreprocessor` class definition, all member functions are `public`, and there are no `private` class members because it is a static utility class with no internal state. However, data hiding is still utilized at the implementation level. In the source file, a helper function (`validateMatrix`) is placed inside an anonymous namespace. This acts similarly to a private method by hiding this internal validation logic from the rest of the program and preventing naming conflicts.
 
 **Usage by the Program:** The rest of the program uses this class without needing to create an instance of it. The functions are called directly using the class name e.g., `DataPreprocessor::fillMissingWithMean(dataset)`. It serves as the data preparation pipeline taking the raw dataset, cleaning and formatting it through these static methods, and then passing the refined data off to the main clustering algorithms.
