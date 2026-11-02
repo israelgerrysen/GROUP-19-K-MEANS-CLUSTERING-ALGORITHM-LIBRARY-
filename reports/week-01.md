@@ -1,24 +1,27 @@
-# Progress Report: Project Structure and Data Loading
+# Week 1 Report
+# SSEGAWA JASIFA
+# 25/U/08782/PS
+# BCCE
 
-## Aim
+## Completed
+- Implemented the `DataPreprocessor.hpp` and `DataPreprocessor.cpp` modules to clean and prepare matrices for the K-Means algorithm.
+- Added an internal `validateMatrix` helper function within an anonymous namespace to enforce consistent matrix shapes and guard against infinite values prior to processing.
+- Created `dropColumn` and `dropRowsWithMissingData` functions to handle unneeded or heavily corrupted data points.
+- Developed robust statistical imputation methods (`fillMissingWithMean`, `fillMissingWithMedian`, `fillMissingWithMode`) to safely replace `NaN` values without discarding entire rows.
+- Built a `oneHotEncode` method to dynamically translate categorical strings into binary numerical columns.
+- Authored a standalone C++ test script (`test_preprocessing.cpp`) and verified all matrix manipulation logic successfully.
 
-Set up the project structure, then move data loading out of `k_means.cpp` into its own class. Clustering is not part of this stage.
+## In Progress
+- Testing and correcting the data processing functions to make sure all the functions and the core logic works as intended
 
-## What was done
+## Challenges/Blockers
+- System environment restrictions and path recognition issues prevented the installation and configuration of CMake for automated project building.
+- *Resolution:* Bypassed CMake entirely and executed direct `g++` compilation commands in the terminal to compile the library components and run the test suite.
 
-- **Folder structure:** `include/k_means/DataLoader.hpp` (header), `src/DataLoader.cpp` (implementation), `examples/example_load.cpp` (small program that calls the loader). `football.csv` and the old `k_means.cpp` are still in the root.
-- **Loader:** `DataLoader::loadCSV(filename)` returns a `vector<vector<double>>`. It reads the file line by line, splits each line on commas, and converts each cell with `std::stod`. Cells that are not numbers (header, team names, dates) are skipped.
-- **Error handling:** if the file cannot be opened, it throws a `runtime_error` with the filename. The first version reported a successful load of 0 rows in that case.
+## Next Week
+- Developing a practical example using a real-world dataset to demonstrate the complete data loading and preprocessing pipeline in action.
 
-## Open issues
-
-- Quoted fields like `"3,83"` are still split into two cells, and `stod` can accept one half as a stray number.
-- Skipped text and empty cells make row widths uneven, so columns cannot yet be trusted by index.
-- No tests and no CMake. The old `k_means.cpp` is still in the project.
-
-## Next steps
-
-- Fix the splitting so quoted fields stay in one cell.
-- Choose the numeric features and normalise them.
-- Add a small test (row count, column count, one quoted field) and a CMake file.
-- Start the k-means implementation.
+## AI Use
+- Tool: Gemini
+- Purpose: Implementation logic for the statistical imputation functions and providing exact `g++` terminal commands for manual compilation.
+- Reason: To ensure complex edge cases (such as dividing by zero in empty columns) were safely handled in the C++ logic, and to establish an immediate workaround for the CMake configuration blocker.
