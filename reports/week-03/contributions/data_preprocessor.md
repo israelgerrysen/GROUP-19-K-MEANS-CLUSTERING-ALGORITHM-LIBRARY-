@@ -12,21 +12,16 @@ This report documents the implementation of core Object-Oriented Programming con
 Encapsulation is the bundling of data and the methods that operate on that data into a single unit, as well as restricting direct access to some of the object's components.
 
 **Implementation in `DataPreprocessor`:**
-In the provided `DataPreprocessor.hpp` and `DataPreprocessor.cpp` files, encapsulation is utilized to group related dataset manipulation functions together. The class `DataPreprocessor` encapsulates the following statically accessible behaviors under the `public` access specifier:
+In `DataPreprocessor.hpp` and `DataPreprocessor.cpp` files, encapsulation is utilized to group related dataset manipulation functions together. The class `DataPreprocessor` encapsulates the following statically accessible behaviors under the `public` access specifier:
 
 * `dropColumn`
-
 * `dropRowsWithMissingData`
-
 * `fillMissingWithMean`
-
 * `fillMissingWithMedian`
-
 * `fillMissingWithMode`
-
 * `oneHotEncode`
 
-Currently, the `DataPreprocessor` acts as a static utility class. It does not contain `private` or `protected` member data, since all methods operate directly on the dataset references passed to them.
+While the `DataPreprocessor` acts as a static utility class and does not contain `private` or `protected` member data, encapsulation is heavily utilized at the implementation file level. In `DataPreprocessor.cpp`, the internal helper function `validateMatrix` is enclosed within an anonymous namespace. This restricts its visibility strictly to that source file, perfectly encapsulating the matrix validation logic and preventing naming collisions with other parts of the program.
 
 ## 2. Inheritance
 
