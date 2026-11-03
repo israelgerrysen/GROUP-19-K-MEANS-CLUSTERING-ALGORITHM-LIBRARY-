@@ -46,6 +46,3 @@ Polymorphism would appear only in the base-class design above, where `fit` would
 The report shows that encapsulation is the main idea in the play: learned the private statistics and helper functions are private,and other code uses only a small public interface. it also explains that the class uses neither inheritance nor polymorphm, and why
 
 
-## 4. Class Layout Drawing
-
-![Class Layout Diagram](./diagrams/featureScaler(week_3_progress).jpg)
