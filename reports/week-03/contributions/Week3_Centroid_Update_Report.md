@@ -1,43 +1,31 @@
-# Week 3 Report: Centroid Update
+# Week 3 Report: Class Design in Centroid Update
 
-This report explains inheritance, polymorphism and encapsulation in my `CentroidUpdater` class. The class layout drawing is in the attached photo.
+This report explains how inheritance, polymorphism, and encapsulation apply to the centroid update code. It also gives a simple class layout that can be copied onto paper.
 
-## 1. Class Layout
+## Class Layout
 
+![Class Layout Diagram](./diagrams/CentroidUpdate_class.jpeg)
 
-| Part | Name | Access |
-|---|---|---|
-| Member data | none | - |
-| Member functions | `update()` (static), deleted constructor | public |
-| Type names | `Point`, `Dataset` | public |
-| Private members | none | - |
-| Protected members | none | - |
+When drawing it by hand, make one box with three sections: class name, public members, and private members. Write “none” in the private section. You can note that there are no protected members or stored member data.
 
-## 2. Encapsulation
-Encapsulation means keeping a class's data and functions together and controlling how other code can use them.
+## Encapsulation
 
-`CentroidUpdater` is a utility class. It has **no member data**, so there is no private data to hide. Encapsulation is used in these ways:
-- The update logic (adding up points, counting, and dividing to get the mean) is all inside `update()`. Other code only sees the function's inputs and its result, not the steps.
-- The constructor is deleted (`CentroidUpdater() = delete`), so nobody can create an object by mistake. The class can only be used through its static function.
-- The inputs are passed as `const` references, so `update()` cannot change the caller's data. It builds and returns a new list of centroids.
-- `update()` checks its input and throws `std::invalid_argument` for bad values, so wrong data cannot produce wrong results quietly.
+Encapsulation means organizing related types and actions together and controlling access to them. `CentroidUpdater` groups the centroid update operation and the `Point` and `Dataset` type names in one class. Its inputs are passed into the function, and it returns new centroids without changing the original data.
 
-Encapsulation here is weaker than in a class with private data, such as `CentroidInitializer`. The reason is that this class does not need to store anything.
+This class has no private data to protect. Its members are public, and its constructor is deleted so users call the static function directly without creating an object.
 
-## 3. Inheritance
-Inheritance means one class takes the members of another class (a base class).
+## Inheritance
 
-`CentroidUpdater` does **not** use inheritance. It has no base class and no child classes, because it has one simple job: move each centroid to the average of its points. So there is no inheritance arrow in my drawing, and no `protected` members either, because `protected` is only useful when a child class needs to use its parent's data.
+Inheritance lets one class build on another class. `CentroidUpdater` does not inherit from another class, and no class in this feature inherits from it. Inheritance is not used here.
 
-## 4. Polymorphism
-Polymorphism means the same name can do different things.
+## Polymorphism
 
-`CentroidUpdater` does **not** use polymorphism. It has no virtual functions and no overloaded functions. It has only one function, `update()`, and it always does the same thing.
+Polymorphism lets different classes provide their own versions of the same function, often using virtual functions. `CentroidUpdater` has no virtual functions and does not override a function from a parent class. Polymorphism is not used here.
 
-## 5. Summary
+## How the Class Is Used
 
-| Concept | Used in my class? | Where |
-|---|---|---|
-| Encapsulation | Partly | Logic hidden inside `update()`, deleted constructor, `const` inputs |
-| Inheritance | No | The class is stand-alone |
-| Polymorphism | No | Only one function |
+The rest of the program calls `CentroidUpdater::update(data, assignments, currentCentroids)`. The function checks the inputs, calculates each cluster's average, and returns the updated centroids. A cluster with no assigned points keeps its previous centroid. The test file calls the function with different datasets to check these results and its error handling.
+
+## Summary
+
+`CentroidUpdater` is a utility class with one static update function and no stored member data. The code groups related work together, but it does not use inheritance or polymorphism.
