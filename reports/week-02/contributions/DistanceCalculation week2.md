@@ -2,30 +2,28 @@
 
 
 # Distance Calculation Report
-
 ## 1. What class did you create?
-I created the `DistanceCalculator` class.
+I created a class called `DistanceCalculator`. It has functions for measuring the distance between two points.
 
-## 2. Why?
-K-Means needs to measure how far a point is from a centroid, so it can decide which cluster the point belongs to. I put this in its own class so the distance code is in one place and can be reused by other steps, such as cluster assignment and cluster evaluation.
+## 2. Why did you create it?
+K-Means needs to compare data points with centroids to find which centroid is closest. This class keeps the distance calculations in one place so other parts of the program can use them.
 
-## 3. What data does it hold?
-It holds no data. It has no member variables, because a distance only depends on the two points that are passed in. The class only defines one type name: `Point`, which is a `std::vector<double>` (a list of feature values).
+## 3. What data does the class hold?
+The class does not store changing data in member variables. It defines a type name called `Point`, which means a list of decimal numbers (`std::vector<double>`). The points are passed into its functions when they are called.
 
 ## 4. What functions operate on that data?
-Both functions are `static` and take two points:
-- **`distance(p1, p2)`** returns the Euclidean distance: the square root of the sum of the squared differences.
-- **`squareddistance(p1, p2)`** returns the same value without the square root. It is faster, and it is enough when we only need to compare distances, such as finding the nearest centroid.
 
-If the two points have a different number of dimensions, the functions throw `std::invalid_argument`.
+- `distance(p1, p2)` returns the Euclidean distance. It calculates the square root of the sum of the squared differences between matching values.
+- `squareddistance(p1, p2)` returns the sum of those squared differences without taking the square root. This can save work when the program only needs to compare distances.
+- Both functions check that the points have the same number of values and contain finite numbers. Invalid input causes `std::invalid_argument` to be thrown.
+
+Both functions are `static`, so they can be called using the class name without creating an object. The constructor is deleted to prevent objects from being created.
 
 ## 5. Why are some members private and others public? How is the class used by the rest of the program?
-Everything is **public**, because there is no internal state to protect. The constructor is **deleted** (`DistanceCalculator() = delete`), so nobody can create an object. This makes it a utility class.
+The `Point` type and the two distance functions are public so other parts of the program can use them. There are no private or protected data members because the class does not store its own data.
 
-The rest of the program calls the functions directly, with no object:
+The rest of the program can call `DistanceCalculator::distance(point, centroid)` or `DistanceCalculator::squareddistance(point, centroid)`. The returned number tells the caller how far apart the two points are. The test file calls these functions with examples and checks that invalid inputs are rejected.
 
-```cpp
-double d = DistanceCalculator::distance(point, centroid);
-```
+## Header File Role
+The header declares the class, its `Point` type, and its public functions. The `.cpp` file contains the formulas and input checks.
 
-It is used during cluster assignment (to find the nearest centroid) and cluster evaluation. The class is checked by `testing_Distance_Calculation.cpp`, which tests known distances (such as the 3-4-5 triangle), identical points, negative values, different dimensions, and the error for different dimensions.
