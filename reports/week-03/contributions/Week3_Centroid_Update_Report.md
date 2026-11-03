@@ -6,7 +6,7 @@ This report explains how inheritance, polymorphism, and encapsulation apply to t
 
 ![Class Layout Diagram](./diagrams/CentroidUpdate_class.jpeg)
 
-When drawing it by hand, make one box with three sections: class name, public members, and private members. Write “none” in the private section. You can note that there are no protected members or stored member data.
+When drawing it by hand, make one box with three sections: class name, public members, and private members. Write “none” in the private section. You can note that there are no protected members or stored member data
 
 ## Encapsulation
 
