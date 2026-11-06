@@ -1,10 +1,5 @@
-Okoboi-Reuben-25/U/08779/PS
 // API for evaluating a completed clustering with within-cluster sum of squared distances (inertia).
 // Labels are indexed per input point and refer to entries in the supplied centroid list.
-
-// API for evaluating a completed clustering with within-cluster sum of squared distances (inertia).
-// Labels are indexed per input point and refer to entries in the supplied centroid list.
- main
 #ifndef K_MEANS_CLUSTER_EVALUATOR_HPP
 #define K_MEANS_CLUSTER_EVALUATOR_HPP
 
