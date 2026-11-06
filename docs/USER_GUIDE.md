@@ -21,9 +21,20 @@ Run these commands from the project root. The generated `build/` directory is di
 ### Windows PowerShell
 
 ```powershell
-cmake -S . -B build
-cmake --build build --config Release
+$toolchain = Join-Path $env:LOCALAPPDATA "Programs\llvm-mingw-20261020-ucrt-x86_64\bin"
+$env:Path = "$env:LOCALAPPDATA\Programs\CMake\bin;$toolchain;$env:Path"
+
+cmake -S . -B build-mingw -G "MinGW Makefiles" `
+  "-DCMAKE_MAKE_PROGRAM=$toolchain\mingw32-make.exe" `
+  "-DCMAKE_CXX_COMPILER=$toolchain\clang++.exe" `
+  "-DCMAKE_AR=$toolchain\llvm-ar.exe" `
+  "-DCMAKE_RANLIB=$toolchain\llvm-ranlib.exe" `
+  "-DCMAKE_LINKER=$toolchain\ld.lld.exe" `
+  -DCMAKE_BUILD_TYPE=Release
+
+cmake --build build-mingw --config Release --parallel 2
 ```
+
 
 ### Linux or macOS
 
