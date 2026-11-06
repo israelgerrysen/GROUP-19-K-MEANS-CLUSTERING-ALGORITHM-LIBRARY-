@@ -1,5 +1,10 @@
+Okoboi-Reuben-25/U/08779/PS
 // Implements inertia: sum the squared distance from each point to its labeled centroid.
 // Input checks protect label indexing and require finite, dimensionally consistent data.
+
+// Implements inertia: sum the squared distance from each point to its labeled centroid.
+// Input checks protect label indexing and require finite, dimensionally consistent data.
+main
 #include "k_means/Cluster_Evaluator.hpp"
 
 #include <cmath>
@@ -20,9 +25,13 @@ double ClusterEvaluator::computeInertia(const Dataset& points,
     };
     for (const auto& point : points) validatePoint(point);
     for (const auto& centroid : centroids) validatePoint(centroid);
+ Okoboi-Reuben-25/U/08779/PS
+    // Accumulate in wider precision, then check that the result fits in double.
+    long double inertia = 0.0L;
 
     // Accumulate in wider precision, then check that the result fits in double.
     long double inertia = 0.0L;
+main
     for (std::size_t i = 0; i < points.size(); ++i) {
         const int label = labels[i];
         if (label < 0 || static_cast<std::size_t>(label) >= centroids.size())
