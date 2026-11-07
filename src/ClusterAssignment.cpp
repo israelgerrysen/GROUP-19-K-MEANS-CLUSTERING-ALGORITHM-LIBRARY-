@@ -1,43 +1,41 @@
+// Implements the assignment half of a K-Means iteration by selecting the nearest centroid.
+// Comparing squared distances preserves nearest-centroid ordering without square roots.
 #include "k_means/ClusterAssignment.hpp"
-#include "k_means/Distance_Calculation.hpp"
+
+#include <cmath>
 #include <limits>
 #include <stdexcept>
 
-// Assign each point to its nearest centroid.
-// We compare squared distances, no sqrt() needed -
-// the smallest squared distance is also the smallest real distance.
 std::vector<int> ClusterAssignment::assignClusters(
-    const Dataset& data, const Dataset& centroids)
-{
-    // 1. Guard against bad input
-    if (data.empty()) {
-        throw std::invalid_argument("Data must not be empty.");
-    }
-    if (centroids.empty()) {
-        throw std::invalid_argument("Centroids must not be empty.");
-    }
+    const Dataset& data, const Dataset& centroids) {
+    if (data.empty()) throw std::invalid_argument("Data must not be empty.");
+    if (centroids.empty()) throw std::invalid_argument("Centroids must not be empty.");
+    const auto dimensions = data.front().size();
+    if (dimensions == 0) throw std::invalid_argument("Points must contain at least one feature.");
+    const auto validatePoint = [dimensions](const Point& point) {
+        if (point.size() != dimensions) throw std::invalid_argument("All points must have the same dimension.");
+        for (double value : point) if (!std::isfinite(value)) throw std::invalid_argument("Point coordinates must be finite.");
+    };
+    for (const auto& point : data) validatePoint(point);
+    for (const auto& centroid : centroids) validatePoint(centroid);
 
-    // 2. Prepare result: one slot per point
-    std::vector<int> assignments;
-    assignments.reserve(data.size());
-
-    // 3. For each point, find its nearest centroid
-    for (const Point& point : data) {
-        double bestDistance = std::numeric_limits<double>::max();
-        int bestCluster = 0;
-
-        for (size_t j = 0; j < centroids.size(); ++j) {
-            double distance = DistanceCalculator::squaredDistance(point, centroids[j]);
-
-            // Use < not <= so ties keep the FIRST centroid (lowest index)
+    // Keep one result slot per point; reserve avoids repeated reallocations.
+    std::vector<int> labels;
+    labels.reserve(data.size());
+    for (const auto& point : data) {
+        // Start with centroid zero. Strict improvement keeps lowest-index ties.
+        std::size_t best = 0;
+        double bestDistance = DistanceCalculator::squareddistance(point, centroids.front());
+        for (std::size_t c = 1; c < centroids.size(); ++c) {
+            const double distance = DistanceCalculator::squareddistance(point, centroids[c]);
             if (distance < bestDistance) {
                 bestDistance = distance;
-                bestCluster = static_cast<int>(j);
+                best = c;
             }
         }
-
-        assignments.push_back(bestCluster);
+        if (best > static_cast<std::size_t>(std::numeric_limits<int>::max()))
+            throw std::overflow_error("Number of clusters exceeds label capacity.");
+        labels.push_back(static_cast<int>(best));
     }
-
-    return assignments;
+    return labels;
 }
