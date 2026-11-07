@@ -2,6 +2,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 
 namespace {
@@ -66,6 +67,9 @@ int main() {
     throws<std::invalid_argument>([&] { CentroidUpdater::update(data, {0, 0, -1, 1}, old); }, "negative label");
     throws<std::invalid_argument>([&] { CentroidUpdater::update(data, {0, 0, 1, 1}, Dataset{{0}, {1}}); }, "dimension mismatch");
     throws<std::invalid_argument>([&] { CentroidUpdater::update(data, {0, 0, 1, 1}, Dataset{{0, 0}, {1}}); }, "centroids differ in size");
+    throws<std::invalid_argument>([] { CentroidUpdater::update({{1, 2}}, {0}, {{}}); }, "zero-dimensional centroid");
+    throws<std::invalid_argument>([] { CentroidUpdater::update({{std::numeric_limits<double>::infinity()}}, {0}, {{0}}); }, "non-finite data");
+    throws<std::invalid_argument>([] { CentroidUpdater::update({{1}}, {0}, {{std::numeric_limits<double>::quiet_NaN()}}); }, "non-finite centroid");
 
     std::cout << "All " << checks << " checks passed.\n";
     return 0;

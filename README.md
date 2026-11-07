@@ -1,195 +1,179 @@
 # GROUP-19-K-MEANS-CLUSTERING-ALGORITHM-LIBRARY-
 
-A small, class-based C++ library that implements the K-Means clustering algorithm. K-Means groups data points into `k` clusters so that points in the same cluster are close to each other.
+A reusable C++20 library that groups numeric data points into `k` clusters using the K-Means algorithm. The library separates data preparation, clustering operations, convergence checks, empty-cluster handling, and cluster evaluation into public modules.
 
-This project was built for **Machine Learning 11: Design and Implementation of the K-Means Clustering Algorithm in C++**.
+This project was developed for **Machine Learning 11: Design and Implementation of the K-Means Clustering Algorithm in C++**.
+
+## Project objective
+
+Design and implement a reusable C++ library that demonstrates object-oriented design, a clear public API, appropriate algorithms and data structures, input validation, professional project organization, testing, and documentation. This library provides the components needed to run K-Means while allowing each major step to be used and tested separately.
+
+## Main features
+
+- Load numeric data from CSV, optionally selecting and ordering zero-based columns.
+- Clean data by dropping columns or rows with missing values, or impute missing values with the mean, median, or mode.
+- Append one-hot encoded columns from category values supplied separately from the numeric matrix.
+- Scale features with MinMax scaling or z-score standardization, and inverse-transform results.
+- Initialize centroids by selecting distinct input rows, with optional fixed random seed for repeatability.
+- Calculate Euclidean and squared Euclidean distances and assign points to their nearest centroid.
+- Update centroids to the means of their assigned points.
+- Detect convergence by centroid movement, unchanged assignments, or maximum iteration count.
+- Repair empty clusters by moving eligible farthest points into them.
+- Evaluate clustering with inertia (the sum of squared distances to assigned centroids).
+- Build as a reusable CMake library, with example programs, CTest tests, install rules, and an exported CMake package target.
 
 ## How K-Means works
 
-1. **Prepare** the data: load it, clean it and scale the features.
-2. **Initialize** `k` starting centroids by picking random data points.
-3. **Assign** every point to its nearest centroid.
-4. **Update** every centroid by moving it to the mean of its points.
-5. **Repeat** steps 3 and 4 until the clusters stop changing (convergence).
-6. **Evaluate** how good the clusters are.
+1. Load or provide a numeric dataset.
+2. Remove or impute missing values and scale features as needed.
+3. Select `k` initial centroids from distinct data rows.
+4. Assign each point to its nearest centroid.
+5. Repair any empty clusters, then update each centroid to the mean of its assigned points.
+6. Repeat assignment and update until centroids or assignments stabilize, or the iteration limit is reached.
+7. Assign points against the final centroids and calculate inertia.
 
-## Modules
+The library exposes these as components rather than a single public estimator class. The example programs demonstrate how to coordinate the steps using the public umbrella header.
 
-Each step is a separate class, so every part can be tested on its own.
-
-| Step | Class | What it does | Status |
-|---|---|---|---|
-| Dataset loading | `DataLoader` | Loads the dataset | Done |
-| Data preprocessing | `DataPreprocessor` | Prepares and cleans the data | Done |
-| Feature scaling | `FeatureScaler` | Puts features on a similar scale | Done |
-| Centroid initialization | `CentroidInitializer` | Picks `k` unique random data points as starting centroids | Done |
-| Distance calculation | `DistanceCalculator` | Measures the distance between two points | Done |
-| Cluster assignment | `ClusterAssignment` | Gives each point the index of its nearest centroid | Done |
-| Centroid update | `CentroidUpdater` | Moves each centroid to the mean of its points | Done |
-| Convergence detection | `ConvergeDetector` | Decides when to stop repeating | Done |
-| Empty cluster handling | `EmptyClusterHandler` | Fixes clusters that end up with no points | Done |
-| Cluster evaluation | `ClusterEvaluator` | Scores the final clusters | In progress |
 
 ## Project structure
 
-```
-CPP PROJECT/
-├── include/                              Header files (.hpp): class declarations
-│   ├── k-means_cluster.hpp               Umbrella header that includes all the modules
-│   ├── DataLoader.hpp                    DataLoader
-│   ├── DataPreprocessor.hpp              DataPreprocessor
-│   ├── feature_scaler.hpp                FeatureScaler
-│   ├── Centroid_initialization.hpp       CentroidInitializer
-│   ├── Distance_Calculation.hpp          DistanceCalculator
-│   ├── Cluster_Assignment.hpp            ClusterAssignment
-│   └── Centroid_Update.hpp               CentroidUpdater
-│   └── Converge_detector.hpp             ConvergenceDetector
-│   └── Cluster_Evaluator.hpp             ClusterEvaluator
-│
-├── src/                                  Implementation files (.cpp): the code
-│   ├── data_loader.cpp                   DataLoader
-│   ├── data_preprocessor.cpp             DataPreprocessor
-│   ├── feature_scaler.cpp                FeatureScaler
-│   ├── Centroid_initialization.cpp       CentroidInitializer
-│   ├── Distance_calculation1.cpp         DistanceCalculator
-│   ├── Cluster_Assignment.cpp            ClusterAssignment
-│   └── Centroid_Update.cpp               CentroidUpdater
-│
-├── testing_files/                        Test programs, one per module
-│   ├── testing_data_loader.cpp           tests DataLoader
-│   ├── testing_data_preprocessor.cpp     tests DataPreprocessor
-│   ├── testing_feature_scaler.cpp        tests FeatureScaler
-│   ├── testing_Centroid_intialization.cpp  tests CentroidInitializer
-│   ├── testing_Distance_Calculation.cpp  tests DistanceCalculator
-│   ├── testing_Cluster_Assignment.cpp    tests ClusterAssignment
-│   └── testing_Centroid_Update.cpp       tests CentroidUpdater
-│
-└── README.md                             This file
+```text
+project-root/
+├── CMakeLists.txt                 CMake build, test, and install configuration
+├── README.md                      Project overview and quick start
+├── cmake/                         CMake package configuration template
+├── data/input/                    CSV input used by the CSV example
+├── docs/                          User guide, algorithm workflow, and API reference
+├── examples/                      Example programs and example-only helper
+├── include/k_means/               Public C++ headers
+├── reports/                       Weekly reports, contributions, and diagrams
+├── src/                           Library implementation files
+├── tests/                         Module tests registered with CTest
+└── build/                         Generated build output (created by CMake)
 ```
 
-How the files fit together:
-- Every class has a **header** in `include/`, an **implementation** in `src/` and a **test** in `testing_files/`.
-- A test file includes the header of its class, and it is compiled together with the matching `.cpp` file from `src/`.
-- `Cluster_Assignment.hpp` includes `Distance_Calculation.hpp`, so the `ClusterAssignment` test also needs `Distance_calculation1.cpp`.
-- The file names above for `CentroidInitializer`, `DistanceCalculator`, `ClusterAssignment` and `CentroidUpdater` are the exact names used in the code. The names for the data loader, preprocessor and scaler files (apart from `feature_scaler.hpp`) and for `k-means_cluster.hpp` are placeholders: rename them to match your real files.
-- Files for convergence detection, empty cluster handling and cluster evaluation will be added to the same three folders when those modules are finished.
+Each public header in `include/k_means/` declares a module implemented by a corresponding file in `src/`. Tests include public headers and link to the library target. Both example programs use the public umbrella header and link to the library target.
+## Requirements
 
-## Core types
+- CMake 3.16 or newer.
+- A C++20 compiler supported by CMake (for example, a recent GCC, Clang, or MSVC).
+- No third-party C++ library dependency.
 
-All modules use the same two type names:
+## Build
+
+Run these commands from the project root.
+
+### Windows PowerShell
+
+```powershell
+cmake -S . -B build
+cmake --build build --config Release
+```
+
+### Linux or macOS
+
+```sh
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --parallel
+```
+
+Examples are built by default. Configure with `-DKMEANS_BUILD_EXAMPLES=OFF` to omit them. Tests are enabled by default through CTest; use `-DBUILD_TESTING=OFF` to omit test targets.
+
+## Run the examples
+
+Run from the project root so that the bundled CSV path resolves:
+
+```powershell
+.\build\example_kmeans.exe
+.\build\example_csv_clustering.exe
+```
+
+The CSV example accepts a file path as its first argument. By default it reads `data/input/football.csv` and selects zero-based columns 12 and 13 (home and away goal counts):
+
+```powershell
+.\build\example_csv_clustering.exe .\data\input\football.csv
+```
+
+On Linux or macOS, execute `./build/example_kmeans` and `./build/example_csv_clustering` instead. The in-memory example uses a fixed seed. Both examples report clustering output; the CSV example also reports cluster counts.
+
+## Use the library
+
+Include the complete public API with `#include <k_means/k_means.hpp>`. This umbrella header is installed with the library. Individual headers under `k_means/` are also available when an application only needs selected components. This short example illustrates centroid initialization, assignment, and update:
 
 ```cpp
-using Point   = std::vector<double>;   // one data item: one number per feature
-using Dataset = std::vector<Point>;    // a list of points
-```
-
-A centroid is just a `Point`, so the centroids are also a `Dataset`.
-
-## Class details
-
-### `CentroidInitializer`
-Picks `k` different random points from the data as the starting centroids.
-
-```cpp
-CentroidInitializer init(3);          // random seed: different result every run
-CentroidInitializer init(3, 42);      // fixed seed: repeatable result
-auto centroids = init.initialize(data);
-```
-
-- Has private data (`k_` and `gen_`, the random generator) and public functions: `getK()`, `setK()` and `initialize()`.
-- Returns an empty result if the data is empty or `k` is not between 1 and the number of points.
-
-### `DistanceCalculator`
-A utility class. All functions are static and no object is needed.
-
-```cpp
-double d  = DistanceCalculator::distance(a, b);          // Euclidean distance
-double d2 = DistanceCalculator::squareddistance(a, b);   // no square root, faster
-```
-
-- Use `squareddistance` when you only need to compare distances, such as finding the nearest centroid.
-- Throws `std::invalid_argument` if the points have different dimensions.
-
-### `ClusterAssignment`
-A utility class. Gives each point the index of its closest centroid.
-
-```cpp
-std::vector<int> labels = ClusterAssignment::assignClusters(data, centroids);
-```
-
-- `labels[i]` is the cluster index of `data[i]`.
-- If two centroids are equally close, the one with the lower index wins.
-- Throws `std::invalid_argument` if the data or centroids are empty, or if the dimensions differ.
-
-### `CentroidUpdater`
-A utility class. Moves each centroid to the mean of the points assigned to it.
-
-```cpp
-auto newCentroids = CentroidUpdater::update(data, labels, centroids);
-```
-
-- The inputs are not changed. A new list of centroids is returned.
-- A cluster with no points keeps its old centroid (fixing this is the job of `EmptyClusterHandler`).
-- Throws `std::invalid_argument` if the data or centroids are empty, if there is not one label per point, if a label is out of range, or if the dimensions differ.
-
-## Example
-
-A small example that uses the finished modules. This is a sketch with a fixed number of rounds; automatic stopping will come with convergence detection.
-
-```cpp
-#include "Centroid_initialization.hpp"
-#include "Cluster_Assignment.hpp"
-#include "Centroid_Update.hpp"
-#include <iostream>
+#include <k_means/k_means.hpp>
 
 int main() {
-    CentroidInitializer::Dataset data = {
-        {1, 1}, {1.5, 2}, {2, 1},        // a group near (1.5, 1.5)
-        {8, 8}, {9, 9}, {8.5, 9}         // a group near (8.5, 8.7)
-    };
+    using Dataset = CentroidInitializer::Dataset;
+    const Dataset data{{1.0, 1.0}, {1.2, 0.9}, {8.0, 8.0}, {8.2, 7.9}};
 
-    CentroidInitializer init(2, 42);                 // k = 2, fixed seed
-    auto centroids = init.initialize(data);
-
-    for (int round = 0; round < 10; ++round) {
-        auto labels = ClusterAssignment::assignClusters(data, centroids);
-        centroids   = CentroidUpdater::update(data, labels, centroids);
-    }
-
-    for (const auto& c : centroids) {
-        std::cout << "(" << c[0] << ", " << c[1] << ")\n";
+    CentroidInitializer initializer(2, 42U);
+    Dataset centroids = initializer.initialize(data);
+    for (int iteration = 0; iteration < 20; ++iteration) {
+        const auto labels = ClusterAssignment::assignClusters(data, centroids);
+        centroids = CentroidUpdater::update(data, labels, centroids);
     }
 }
 ```
 
-## Building and testing
+This compact snippet uses a fixed iteration count and omits preprocessing and empty-cluster repair. See `examples/example_kmeans.cpp` and `examples/example_csv_clustering.cpp` for fuller workflows, or the [user guide](docs/USER_GUIDE.md) and [API reference](docs/API_REFERENCE.md) for details. Invalid input is generally reported with standard exceptions such as `std::invalid_argument`.
 
-Requires a C++17 compiler such as `g++`. Each module has its own test program. These commands are run from the project folder, with the headers in `include/`, the sources in `src/` and the tests in `testing_files/`.
 
+## Install and use from another CMake project
+
+Install the library to a chosen prefix:
+
+```sh
+cmake --install build --prefix install
 ```
-g++ -std=c++17 -I include testing_files/testing_Centroid_intialization.cpp src/Centroid_initialization.cpp -o test_centroid
-g++ -std=c++17 -I include testing_files/testing_Distance_Calculation.cpp src/Distance_calculation1.cpp -o test_distance
-g++ -std=c++17 -I include testing_files/testing_Cluster_Assignment.cpp src/Cluster_Assignment.cpp src/Distance_calculation1.cpp -o test_cluster
-g++ -std=c++17 -I include testing_files/testing_Centroid_Update.cpp src/Centroid_Update.cpp -o test_update
+
+Then link the exported CMake target in a consumer project:
+
+```cmake
+find_package(KMeansLibrary CONFIG REQUIRED)
+
+add_executable(my_app main.cpp)
+target_link_libraries(my_app PRIVATE KMeansLibrary::kmeans_lib)
 ```
 
-Run each program after it compiles (on Windows PowerShell, use `.\test_centroid.exe`). Each test prints a message when all its checks pass.
+If the installation prefix is not in a standard location, set `CMAKE_PREFIX_PATH` to that prefix when configuring the consumer project. Public headers install under `include/k_means/`, including the umbrella header `k_means/k_means.hpp`.
 
-Tips:
-- `ClusterAssignment` uses `DistanceCalculator`, so its test also needs `Distance_calculation.cpp`.
-- If a folder name has spaces, put the path in quotes.
-- If a compile fails, an old `.exe` may still be there. Run the test only when the compile succeeds.
+## Run the tests
 
-## Design notes
+Build the project, then run all registered tests:
 
-- **One class per step**, so each part can be understood and tested separately.
-- **Utility classes** (`DistanceCalculator`, `ClusterAssignment`, `CentroidUpdater`) have no stored data. Their constructors are deleted and their functions are static.
-- **Input checks**: invalid input throws `std::invalid_argument` instead of giving wrong results quietly.
-- **No hidden changes**: the functions do not modify the data you pass in.
+```sh
+ctest --test-dir build --output-on-failure
+```
 
-## Team
+The CMake project registers separate tests for centroid initialization, centroid update, assignment, evaluation, convergence, CSV loading, preprocessing, distance calculation, empty-cluster handling, and feature scaling.
 
-|NAME | REG NO.| PROGRAMME |
+## Limitations and notes
+
+- K-Means operates on finite numeric features and uses Euclidean distance. Categorical values must be encoded as numeric features before clustering.
+- `DataLoader` treats the first row as a header. Invalid or non-finite numeric cells become NaN for later preprocessing; it does not perform categorical parsing.
+- `DataPreprocessor::oneHotEncode` appends columns from a separate category string per row. It does not read categorical columns from CSV.
+- Missing values should be removed or imputed before scaling or clustering. The example helper uses median imputation.
+- Feature scaling changes the distance space. The complete example reports inertia in scaled feature space and inverse-transforms centroids for display.
+- K-Means can find different local solutions from different initial centroids. Use a fixed seed for repeatable initialization.
+- `CentroidUpdater` leaves a centroid unchanged when its cluster has no points. Call `handleEmptyClusters` during the iteration when empty clusters should be repopulated.
+- The library consists of algorithm components; callers coordinate the sequence. The end-to-end helper in `examples/` is not installed as public library API.
+
+## Documentation
+
+- [User guide](docs/USER_GUIDE.md) — requirements, build, install, examples, and tests.
+- [Algorithm and workflow](docs/ALGORITHM.md) — module responsibilities and iteration flow.
+- [API reference](docs/API_REFERENCE.md) — headers, methods, input rules, and exceptions.
+
+## License
+
+The project's original code is released under the [MIT License](LICENSE). The bundled `football.csv` has no source or license record in the repository and is **not** covered by the code license;
+
+## Team contributions
+
+Weekly module contribution records are kept under `reports/week-*/contributions/`.
+
+| NAME | REG NO. | PROGRAMME |
 |---|---|---|
 | BUSULWA GERRYSON ISRAEL | 25/U/0826 | BELE |
 | SSEGAWA JASIFA | 25/U/08782/PS | BCCE |
@@ -198,4 +182,15 @@ Tips:
 | NANDYOWA PATIENCE VALERIA | 25/U/0851 | BELE |
 | NAKAWEESA LINDA LUCY | 25/U/02658/PS | BCCE |
 | SEBBOWA MASAMBIRA ABRAHAM | 25/U/04087/PS | BCCE |
-| DUMO MOSES | 21/X/20072/PS | BELE|
+| DUMO MOSES | 21/X/20072/PS | BELE |
+
+### Team collaboration
+
+The project stores weekly reports and module contribution notes under `reports/`.
+
+### AI-use declaration
+
+- **Tool:** OpenAI.
+- **Purpose:** Assisted with research on the K-means clustering algorithm,guidence on CMake/build setup, testing the algorithm and debugging to ensure the algorithm works without errors.
+- **Reason:** To provide guidence in research to ensure proper understanding of the logic behind the algorithm and provide guidance on the reusable error-free library.
+

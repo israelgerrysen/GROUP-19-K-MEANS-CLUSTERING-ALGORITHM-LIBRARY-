@@ -1,28 +1,25 @@
 # Week 1 Progress Report
 
 ## Completed
-- Wrote the `CentroidUpdater` class (`Centroid_Update.hpp` and `Centroid_Update.cpp`). It moves each centroid to the average of the points assigned to it.
-- Made the class a utility class: one static function `update()` and a deleted constructor, so no object is needed.
-- Added input checks that throw `std::invalid_argument` for empty data, empty centroids, wrong number of labels, labels out of range, and mismatched dimensions.
-- Made empty clusters keep their old centroid instead of dividing by zero.
-- Wrote the test file `testing_Centroid_Update.cpp` with 17 checks. All 17 pass.
-- Added comments to the header, the implementation and the test file to explain the code.
+- Created the centroid update feature for the K-Means project.
+- Added `CentroidUpdater::update`, which moves each centroid to the average of the data points assigned to its cluster.
+- Added input checks for missing data or centroids, incorrect assignment counts, invalid cluster labels, different point sizes, and non-finite numbers such as infinity or NaN.
+- Made empty clusters keep their previous centroid, so the calculation does not divide by zero.
+- Created a test file with checks for averages, one-point clusters, empty clusters, different data shapes, unchanged inputs, and invalid input.
 
 ## In Progress
-- Connecting `CentroidUpdater` with the other modules (`ClusterAssignment`, `CentroidInitializer`, `DistanceCalculator`) so they work together in the K-Means loop.
-- Deciding how empty clusters should be fixed. The header says this will be the job of an `EmptyClusterHandler`.
+- The feature and its test cases are written. The files reviewed do not show further unfinished work.
 
 ## Challenges/Blockers
-- The project folder name has a space (`CPP PROJECT`), so the compile command failed until the file paths were put in quotes.
-- The compiler could not find `Centroid_Update.hpp` because the header was in a different folder from the `.cpp` files. This was fixed with the `-I` option.
-- After a failed compile, running `.\testing.exe` ran an old build and printed "All tests passed". I learned to run the test only when the compile succeeds.
+- Each data point must have a valid cluster number and the same number of features as the centroids.
+- Empty clusters need special handling. This feature keeps their old centroid; a separate empty-cluster feature could choose another approach.
 
 ## Next Week
-- Combine the modules into one full K-Means loop (assign, update, repeat until the clusters stop changing).
-- Write the `EmptyClusterHandler` for empty clusters.
-- Test the full program on a small example dataset.
+- Connect centroid updating with the cluster assignment step so K-Means can repeat both steps.
+- Deciding how the project should handle empty clusters across the full algorithm.
+- Building and running the project tests, then fix any issues they reveal.
 
 ## AI Use
-- Tool: Claude (by Anthropic)
-- Purpose: Help with the compile commands and errors, add explanatory comments to my code, and give feedback on my report writing.
-- Reason: To understand the errors faster and to make my code easier to read. I checked the results by compiling and running the tests myself.
+- Tool: OpenAI.
+- Purpose: Read the centroid update header, source, and test files and draft this report.
+- Reason: To explain the work in simple language for a presentation.

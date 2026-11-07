@@ -1,14 +1,12 @@
+// API for repairing empty clusters after assignment by moving a far-away point
+// from a cluster with multiple members and updating the corresponding label and centroid.
 #pragma once
 
 #include <vector>
 
-/**
-• @brief Detects and handles empty clusters in the K-Means algorithm
-• by reassigning the furthest data point to the empty cluster.
-• @param data The full dataset represented as a 2D vector of doubles.
-• @param centroids The current cluster centroids as a 2D vector of doubles.
-• @param assignments A vector containing the current cluster label for each data point.
-*/
+// Reassigns farthest points from clusters containing multiple points to empty
+// clusters, updating both centroids and labels. Throws invalid_argument when
+// the inputs are inconsistent or an empty cluster cannot be repopulated.
 void handleEmptyClusters(
 const std::vector<std::vector<double>>& data,
 std::vector<std::vector<double>>& centroids,

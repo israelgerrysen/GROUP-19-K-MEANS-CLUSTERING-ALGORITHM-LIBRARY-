@@ -1,58 +1,21 @@
-#ifndef INERTIAEVALUATOR.HPP
-#define INERTIAEVALUATOR.HPP
+// API for evaluating a completed clustering with within-cluster sum of squared distances (inertia).
+// Labels are indexed per input point and refer to entries in the supplied centroid list.
+#ifndef K_MEANS_CLUSTER_EVALUATOR_HPP
+#define K_MEANS_CLUSTER_EVALUATOR_HPP
 
 #include <vector>
-#include <cmath>
-#include <cstddef>
 
+class ClusterEvaluator {
+public:
+    using Point = std::vector<double>;
+    using Dataset = std::vector<Point>;
 
-// DATA STRUCTURE DEFINITIONS
- 
-
-// Structure to represent a 2D data point
-Struct Point {
-    Double x;
-    Double y;
+    // Sum of squared distances from each point to its assigned centroid.
+    // Throws std::invalid_argument for malformed or inconsistent inputs.
+    static double computeInertia(const Dataset& points,
+                                 const std::vector<int>& labels,
+                                 const Dataset& centroids);
+    ClusterEvaluator() = delete;
 };
 
-
-// HELPER FUNCTIONS
-
-
-
-Inline double calculateSquaredDistance(const Point& p1, const Point& p2) {
-    Double dx = p1.x – p2.x;
-    Double dy = p1.y – p2.y;
-    Return (dx * dx) + (dy * dy);
-}
-
-
-// INERTIA EVALUATION FUNCTION
-
-
-
-Inline double computeInertia(const std::vector<Point>& points, 
-                              Const std::vector<int>& labels, 
-                              Const std::vector<Point>& centroids) {
-    
-    Double totalInertia = 0.0;
-
-    // Loop through every single data point in our dataset
-    For (size_t i = 0; i < points.size(); ++i) {
-        
-        Int assignedCluster = labels[i];
-        
-        // Basic bounds check to prevent out-of-bounds errors with malformed labels
-        If (assignedCluster >= 0 && static_cast<size_t>(assignedCluster) < centroids.size()) {
-            Const Point& centroid = centroids[assignedCluster];
-            
-            // Add squared distance to running total
-            totalInertia += calculateSquaredDistance(points[i], centroid);
-        }
-    }
-
-    Return totalInertia;
-}
-
-#endif // INERTIAEVALUATOR.HPP
-
+#endif // K_MEANS_CLUSTER_EVALUATOR_HPP

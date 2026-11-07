@@ -1,3 +1,5 @@
+// Public interface for the centroid update step; implementation is in src/Centroid_Update.cpp.
+// Each non-empty cluster's next centroid is the feature-wise mean of its assigned points.
 // ============================================================================
 // Centroid_Update.hpp
 //

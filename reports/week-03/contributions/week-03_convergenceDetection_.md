@@ -1,5 +1,7 @@
-NANDYOWA PATIENCE VALERIA 25/U/0851
 # Week 3 Progress Report
+
+**Name:** NANDYOWA PATIENCE VALERIA  
+**Reg No:** 25/U/0851
 
 ## Inheritance, Polymorphism and Encapsulation in the Convergence Detector
 
@@ -28,4 +30,4 @@ Polymorphism wasn't used in this class. None of the member functions are virtual
 | Inheritance   | Not used (one responsibility, no variants needed yet)                        |
 | Polymorphism  | Not used (no virtual functions, no templates)                                |
 
-![ConvergenceDetector class layout](../contributions/diagrams/week-03-class-layout.jpeg)
+![ConvergenceDetector class layout](diagrams/week-03-class-layout.jpeg)

@@ -2,24 +2,26 @@
 
 # Week 1 Progress Report
 
+## Completed
+- Created the distance calculation feature for the K-Means project.
+- Added `DistanceCalculator::distance`, which finds the Euclidean distance between two points.
+- Added `DistanceCalculator::squareddistance`, which finds the squared distance without calculating a square root. This is useful when comparing distances to find the nearest centroid.
+- Added checks that the two points have the same number of values and that their values are finite numbers.
+- Created tests for common distance examples, points with different numbers of dimensions, and invalid values.
 
-Completed work so far
-- Implemented distance calculation (`calculateEuclideanDistance(p1, p2)` in `Distance_calculation1.cpp`, declared in `Distance_Calculation.hpp`). It returns the Euclidean distance between two points with any number of features.
-- The function throws `std::invalid_argument` if the two points have different numbers of features. Two empty points return `0`.
-- Wrote a test program (`testing_distance.cpp`) with 9 checks: known distances (3-4-5 triangle, 1D, 3D, negative coordinates, 10 dimensions), identical points, symmetry, empty points, and mismatched dimensions. All checks pass.
-  
+## In Progress
+- The feature and its test cases are present in the files reviewed. The files do not show other unfinished work.
 
+## Challenges/Blockers
+- Both points must have the same number of dimensions. Otherwise, the calculation throws `std::invalid_argument`.
+- Infinite and NaN values are rejected so they do not produce invalid distance results.
+- The test file contains checks, but I have not confirmed from these files alone that the tests were run.
 
+## Next Week
+- Connect the distance functions to the step that finds the nearest centroid.
+- Build and run the project tests, then fix any issues they reveal.
+- Demonstrate how the normal and squared distance functions give useful results.
 
-Challenges/Blockers
-- The function name was spelled differently in the header (`calculateEuclideanDistance`) and the `.cpp` (`calculateEuclidianDistance`). The code compiled but failed at link time with `undefined reference`. Fixed by correcting the spelling in the `.cpp`.
-- Building the test failed with `No such file or directory` because the terminal was in the wrong folder. Fix: move into the folder that contains the files before compiling.
-
-Next Week
-- Use the distance function in cluster assignment and consider a squared-distance version, since the square root is not needed when only comparing distances.
-  
-
-AI Use
-- Tool: Claude (Anthropic)
-- Purpose: Reviewing the distance code (found the function-name spelling mismatch), writing the test program, and diagnosing the build errors.
-- Reason: To find and fix the errors faster and to speed up writing tests. The code was compiled, run and checked by the team before use.
+## AI Use
+- Tool: OpenAI Codex.
+- Reason: To explain the feature in simple language for a presentation.

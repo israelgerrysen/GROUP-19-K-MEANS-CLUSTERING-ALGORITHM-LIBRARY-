@@ -1,11 +1,13 @@
+// API for assigning each point to its nearest centroid; labels are zero-based centroid indexes.
+// Ties are resolved by keeping the first (lowest-index) centroid encountered.
 
 #ifndef CLUSTER_ASSIGNMENT_HPP
 #define CLUSTER_ASSIGNMENT_HPP
 
-#include "Distance_Calculation.hpp"
+#include "k_means/Distance_Calculation.hpp"
 #include <vector>
 #include <stdexcept>
-
+ 
 class ClusterAssignment {
 public:
     // Define a single data point and a collection of data points.

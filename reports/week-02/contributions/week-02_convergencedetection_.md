@@ -1,5 +1,7 @@
-NANDYOWA PATIENCE VALERIA 25/U/0851
 # Week 2 Progress Report
+
+**Name:** NANDYOWA PATIENCE VALERIA  
+**Reg No:** 25/U/0851
 
 ## Class Structure and Implementation: Convergence Detection
 

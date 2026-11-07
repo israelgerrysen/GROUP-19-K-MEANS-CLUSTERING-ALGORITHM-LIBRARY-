@@ -1,10 +1,9 @@
+// API for choosing k distinct input rows as the initial K-Means centroids.
+// The optional seed constructor makes initialization repeatable for tests and examples.
 #ifndef INITIALIZE_CENTROID
 #define INITIALIZE_CENTROID
 #include <vector>
 #include <random>
-#include <algorithm>
-#include <limits>
-#include <numeric>
 #include <stdexcept>
 
 
@@ -20,6 +19,8 @@ public:
     int  getK() const;
     void setK(int k);
 
+    // Select k distinct rows. Throws invalid_argument for invalid k, empty,
+    // ragged, or non-finite data.
     Dataset initialize(const Dataset& data);
 
 private:

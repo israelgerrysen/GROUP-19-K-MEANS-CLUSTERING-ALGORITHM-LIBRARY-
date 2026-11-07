@@ -1,5 +1,7 @@
-NANDYOWA PATIENCE VALERIA 25/U/0851
 # Week 1 Progress Report
+
+**Name:** NANDYOWA PATIENCE VALERIA  
+**Reg No:** 25/U/0851
 
 ## Completed
 - Went through the repo layout and read how it was arranged so I could follow the format
@@ -9,7 +11,7 @@ NANDYOWA PATIENCE VALERIA 25/U/0851
   - a centroid movement check (Euclidean distance compared against a tolerance)
   - an assignment check (have any labels changed since the last iteration?)
   - a combined stop condition that also stops once a maximum number of iterations is reached
-- Wrote a small test program that covers the main pass and fail cases.
+- Wrote a test program that covers the main pass and fail cases, plus the edge cases: empty centroid lists, a different number of centroids, mismatched dimensions, a NaN centroid, movement exactly equal to the tolerance, and invalid constructor/setter values.
 - Compiled the tests and ran them. All the checks printed PASS.
 
 ## In Progress
@@ -20,7 +22,6 @@ NANDYOWA PATIENCE VALERIA 25/U/0851
 - I couldn't decide whether convergence should be judged by the centroids, the assignments, or both. In the end I gave the class separate methods for each, plus a combined one, so the caller can pick.
 
 ## Next Week
-- Add the edge-case tests I haven't done yet (empty centroid list, mismatched dimensions and so on).
 - Put together a short demo that shows the detector stopping a made-up K-Means run.
 
 ## AI Use

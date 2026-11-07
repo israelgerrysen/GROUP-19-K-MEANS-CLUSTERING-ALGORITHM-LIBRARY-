@@ -1,3 +1,5 @@
+// Implements convergence checks using centroid movement, unchanged labels, and an iteration cap.
+// Tolerance and iteration settings are validated when constructed or changed.
 #include "k_means/ConvergenceDetector.hpp"
 #include <cmath>
 #include <cstddef>

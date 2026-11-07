@@ -5,6 +5,7 @@
 
 ## Completed
 - Implemented the `DataPreprocessor.hpp` and `DataPreprocessor.cpp` modules to clean and prepare matrices for the K-Means algorithm.
+- Added an internal `validateMatrix` helper function within an anonymous namespace to enforce consistent matrix shapes and guard against infinite values prior to processing.
 - Created `dropColumn` and `dropRowsWithMissingData` functions to handle unneeded or heavily corrupted data points.
 - Developed robust statistical imputation methods (`fillMissingWithMean`, `fillMissingWithMedian`, `fillMissingWithMode`) to safely replace `NaN` values without discarding entire rows.
 - Built a `oneHotEncode` method to dynamically translate categorical strings into binary numerical columns.

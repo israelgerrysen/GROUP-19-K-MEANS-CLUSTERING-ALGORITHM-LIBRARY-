@@ -1,6 +1,9 @@
-#ifndef DISTANCE_H
-#define DISTANCE_H
+// API for Euclidean distance operations used when comparing points and centroids.
+// Squared distance avoids a square root when only relative distances are needed.
+#ifndef K_MEANS_DISTANCE_CALCULATION_HPP
+#define K_MEANS_DISTANCE_CALCULATION_HPP
 #include <vector>
+#include <stdexcept>
 
 //Calculating the Euclidean distance between two n-dimensional points that are represented as vectors
 //Calculates distances between two n-dimensional points.
@@ -23,4 +26,4 @@ public:
     DistanceCalculator() = delete;
 };
  
-#endif // DISTANCE_CALCULATION_HPP
+#endif // K_MEANS_DISTANCE_CALCULATION_HPP

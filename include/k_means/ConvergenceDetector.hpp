@@ -1,3 +1,5 @@
+// API for deciding whether K-Means has stabilized or reached its iteration limit.
+// Callers can check centroid movement, assignment stability, or either stopping condition.
 #ifndef CONVERGENCEDETECTOR_HPP
 #define CONVERGENCEDETECTOR_HPP
 
@@ -11,8 +13,8 @@ public:
     // Throws std::invalid_argument otherwise (the setters do the same).
     explicit ConvergenceDetector(double tolerance = 1e-4, int maxIterations = 300);
 
-    // True if no centroid moved more than the tolerance. Two empty lists count
-    // as converged. False if the centroid count differs or any centroid is NaN.
+    // True if no centroid moved more than the tolerance. False for a different
+    // centroid count or non-finite coordinates.
     // Throws std::invalid_argument if the dimensions differ.
     bool centroidsConverged(
         const std::vector<std::vector<double>>& oldCentroids,

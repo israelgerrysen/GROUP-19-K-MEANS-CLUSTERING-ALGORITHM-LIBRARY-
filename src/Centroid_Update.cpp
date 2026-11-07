@@ -18,6 +18,7 @@
 
 // std::size_t: the unsigned type used for sizes and loop counters.
 #include <cstddef>
+#include <cmath>
 
 // std::invalid_argument: the exception thrown when the input is not valid.
 #include <stdexcept>
@@ -55,10 +56,16 @@ CentroidUpdater::Dataset CentroidUpdater::update(const Dataset& data,
     // dimensions = how many numbers each point has. The first centroid is
     // used as the reference size.
     const std::size_t dimensions = currentCentroids.front().size();
+    if (dimensions == 0) {
+        throw std::invalid_argument("Points must contain at least one feature.");
+    }
     // Every other centroid must have the same number of dimensions.
     for (const auto& centroid : currentCentroids) {
         if (centroid.size() != dimensions) {
             throw std::invalid_argument("All centroids must have the same dimension.");
+        }
+        for (double value : centroid) {
+            if (!std::isfinite(value)) throw std::invalid_argument("Centroid values must be finite.");
         }
     }
 
@@ -70,7 +77,7 @@ CentroidUpdater::Dataset CentroidUpdater::update(const Dataset& data,
     // It starts with k points of all zeros, each with `dimensions` numbers.
     Dataset sums(k, Point(dimensions, 0.0));
     // counts[c] will hold how many points are in cluster c (starts at 0).
-    std::vector<int> counts(k, 0);
+    std::vector<std::size_t> counts(k, 0);
 
     
     // Look at every data point once.
@@ -88,6 +95,9 @@ CentroidUpdater::Dataset CentroidUpdater::update(const Dataset& data,
         // The point must have the same number of dimensions as the centroids.
         if (data[i].size() != dimensions) {
             throw std::invalid_argument("Point and centroid dimensions differ.");
+        }
+        for (double value : data[i]) {
+            if (!std::isfinite(value)) throw std::invalid_argument("Data values must be finite.");
         }
 
         // Convert the label to an unsigned index so it can be used safely
