@@ -24,4 +24,4 @@
 
 ## AI Use
 - Tool: OpenAI Codex.
-- Reason: To explain the feature in simple language for a presentation.
+- Reasoning of what the function can do in the Kmeans clustering algorithm.
