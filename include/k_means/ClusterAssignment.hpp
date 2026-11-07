@@ -7,7 +7,7 @@
 #include "k_means/Distance_Calculation.hpp"
 #include <vector>
 #include <stdexcept>
- 
+
 class ClusterAssignment {
 public:
     // Define a single data point and a collection of data points.
