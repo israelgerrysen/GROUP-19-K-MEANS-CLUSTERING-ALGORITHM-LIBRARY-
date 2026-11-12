@@ -50,14 +50,14 @@ Examples are enabled by default. To build only the library, configure with `-DKM
 From the project root, run the generated programs:
 
 ```powershell
-.\build\example_kmeans.exe
-.\build\example_csv_clustering.exe
+.\build-mingw\example_kmeans.exe
+.\build-mingw\example_csv_clustering.exe
 ```
 
 On Linux or macOS, use `./build/example_kmeans` and `./build/example_csv_clustering`. The CSV example accepts a CSV path as its first argument and selects zero-based columns 12 and 13 in the bundled football dataset:
 
 ```powershell
-.\build\example_csv_clustering.exe .\data\input\football.csv
+.\build-mingw\example_csv_clustering.exe .\data\input\football.csv
 ```
 
 The in-memory example has fixed synthetic data and a fixed seed, so its initial centroids are repeatable. Both programs print cluster centroids, labels or counts, iteration count, and inertia as appropriate. Each example coordinates the public library components directly through `#include <k_means/k_means.hpp>`.
