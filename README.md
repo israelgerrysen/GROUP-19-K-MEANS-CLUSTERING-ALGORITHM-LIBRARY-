@@ -102,7 +102,7 @@ Run from the project root so that the bundled CSV path resolves:
 The CSV example accepts a file path as its first argument. By default it reads `data/input/football.csv` and selects zero-based columns 12 and 13 (home and away goal counts):
 
 ```powershell
-.\build\example_csv_clustering.exe .\data\input\football.csv
+.\build-mingw\example_csv_clustering.exe .\data\input\football.csv
 ```
 
 On Linux or macOS, execute `./build/example_kmeans` and `./build/example_csv_clustering` instead. The in-memory example uses a fixed seed. Both examples report clustering output; the CSV example also reports cluster counts.
