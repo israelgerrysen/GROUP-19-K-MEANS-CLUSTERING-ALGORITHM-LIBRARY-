@@ -95,8 +95,8 @@ Examples are built by default. Configure with `-DKMEANS_BUILD_EXAMPLES=OFF` to o
 Run from the project root so that the bundled CSV path resolves:
 
 ```powershell
-.\build\example_kmeans.exe
-.\build\example_csv_clustering.exe
+.\build-mingw\example_kmeans.exe
+.\build-mingw\example_csv_clustering.exe
 ```
 
 The CSV example accepts a file path as its first argument. By default it reads `data/input/football.csv` and selects zero-based columns 12 and 13 (home and away goal counts):
